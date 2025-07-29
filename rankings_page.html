@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSearch - Rankings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.08);
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            padding: 40px 24px 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
+            font-weight: 400;
+        }
+
+        /* Ranking Sources Section */
+        .ranking-sources {
+            padding: 20px 24px;
+            background: white;
+            margin: 0 24px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .sources-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .source-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            max-width: 80px;
+        }
+
+        .source-image {
+            width: auto;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .source-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: #64748b;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* Search and Filters Section */
+        .search-section {
+            margin: 20px 24px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 16px 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .search-bar:focus-within {
+            border-color: #1E40AF;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1);
+        }
+
+        .search-icon {
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            background: transparent;
+            flex: 1;
+            font-size: 16px;
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        .search-input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+
+
+        /* Dropdown Filters */
+        .dropdown-filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .dropdown-container {
+            position: relative;
+        }
+
+        .dropdown-btn {
+            width: 100%;
+            background: #f8fafc;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+        }
+
+        .dropdown-btn:hover {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .dropdown-btn.active {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .dropdown-icon {
+            color: #64748b;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-btn.active .dropdown-icon {
+            transform: rotate(180deg);
+            color: #667eea;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            border: 1px solid #e2e8f0;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #1e293b;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f8fafc;
+        }
+
+        .dropdown-item.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Content */
+        .content {
+            padding: 32px 24px 100px;
+        }
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .view-all {
+            color: #1E40AF;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .view-all:hover {
+            color: #0F766E;
+        }
+
+        /* Rankings List */
+        .rankings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ranking-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid #f1f5f9;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .ranking-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #1E40AF, #0F766E);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            z-index: 2;
+        }
+
+        .ranking-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border-color: #e2e8f0;
+        }
+
+        .ranking-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .ranking-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1E40AF;
+            flex-shrink: 0;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .university-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .ranking-card:hover .university-image {
+            transform: scale(1.05);
+        }
+
+        .university-info {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .university-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .university-location {
+            font-size: 14px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .location-icon {
+            color: #1E40AF;
+            font-size: 12px;
+        }
+
+        .university-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stars {
+            color: #fbbf24;
+            font-size: 14px;
+        }
+
+        .rating-text {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .score {
+            background: linear-gradient(135deg, #0F766E 0%, #0D5A5A 100%);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        /* Top 3 Special Styling */
+        .ranking-card.top-1 .ranking-number {
+            color: #fbbf24;
+            font-size: 32px;
+        }
+
+        .ranking-card.top-2 .ranking-number {
+            color: #94a3b8;
+            font-size: 30px;
+        }
+
+        .ranking-card.top-3 .ranking-number {
+            color: #cd7f32;
+            font-size: 30px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 20px 20px 0 0;
+            padding: 16px 24px 32px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 32px;
+            max-width: 414px;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: #64748b;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .nav-item.active {
+            color: #1E40AF;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+            }
+            
+            .header {
+                padding: 30px 20px 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .ranking-sources {
+                padding: 16px 20px;
+            }
+            
+            .sources-container {
+                gap: 20px;
+                max-width: 250px;
+            }
+            
+            .source-image {
+                width: auto;
+                height: 50px;
+            }
+            
+            .source-label {
+                font-size: 10px;
+            }
+            
+            .search-section {
+                margin: 16px 20px 0;
+            }
+            
+            .content {
+                padding: 24px 20px 100px;
+            }
+            
+            .ranking-card {
+                padding: 0;
+            }
+            
+            .ranking-number {
+                width: 60px;
+                font-size: 20px;
+            }
+            
+            .university-image {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .university-info {
+                padding: 16px;
+            }
+            
+            .bottom-nav {
+                padding: 12px 20px 28px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="header-content">
+                <h1>University Rankings</h1>
+                <p>Discover the world's top universities</p>
+            </div>
+        </div>
+
+        <!-- Ranking Sources Section -->
+        <div class="ranking-sources">
+            <div class="sources-container">
+                <div class="source-item">
+                    <img src="images/qs.png" alt="QS World University Rankings" class="source-image">
+                    
+                </div>
+                <div class="source-item">
+                    <img src="images/us_news.png" alt="THE World University Rankings" class="source-image">
+                    
+                </div>
+                <div class="source-item">
+                    <img src="images/the.png" alt="US News Rankings" class="source-image">
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filters Section -->
+        <div class="search-section">
+            <div class="search-container">
+                <div class="search-bar">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search universities...">
+                </div>
+                
+
+                
+                <div class="dropdown-filters">
+                    <div class="dropdown-container">
+                        <button class="dropdown-btn" id="subjectDropdown">
+                            <span>Ranking by Subject</span>
+                            <i class="fas fa-chevron-down dropdown-icon"></i>
+                        </button>
+                        <div class="dropdown-menu" id="subjectMenu">
+                            <div class="dropdown-item selected">All Subjects</div>
+                            <div class="dropdown-item">Computer Science</div>
+                            <div class="dropdown-item">Medicine</div>
+                            <div class="dropdown-item">Business</div>
+                            <div class="dropdown-item">Law</div>
+                            <div class="dropdown-item">Engineering</div>
+                            <div class="dropdown-item">Arts & Humanities</div>
+                            <div class="dropdown-item">Social Sciences</div>
+                            <div class="dropdown-item">Natural Sciences</div>
+                            <div class="dropdown-item">Life Sciences</div>
+                        </div>
+                    </div>
+                    
+                    <div class="dropdown-container">
+                        <button class="dropdown-btn" id="regionDropdown">
+                            <span>Regions</span>
+                            <i class="fas fa-chevron-down dropdown-icon"></i>
+                        </button>
+                        <div class="dropdown-menu" id="regionMenu">
+                            <div class="dropdown-item selected">All Regions</div>
+                            <div class="dropdown-item">North America</div>
+                            <div class="dropdown-item">Europe</div>
+                            <div class="dropdown-item">Asia Pacific</div>
+                            <div class="dropdown-item">Latin America</div>
+                            <div class="dropdown-item">Middle East</div>
+                            <div class="dropdown-item">Africa</div>
+                            <div class="dropdown-item">Oceania</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Global Rankings Section -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        Global Rankings 2024
+                    </div>
+                    <a href="#" class="view-all">View All</a>
+                </div>
+                
+                <div class="rankings-list">
+                    <div class="ranking-card top-1">
+                        <div class="ranking-number">1</div>
+                        <img src="images/university1.jpg" alt="Harvard University" class="university-image">
+                        <div class="university-info">
+                            <div class="university-name">Harvard University</div>
+                            <div class="university-location">
+                                <i class="fas fa-map-marker-alt location-icon"></i>
+                                Cambridge, Massachusetts, USA
+                            </div>
+                            <div class="university-meta">
+                                <div class="rating">
+                                    <span class="stars">★★★★★</span>
+                                    <span class="rating-text">4.9/5.0</span>
+                                </div>
+                                <div class="score">98.5</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ranking-card top-2">
+                        <div class="ranking-number">2</div>
+                        <img src="images/university2.jpg" alt="Massachusetts Institute of Technology" class="university-image">
+                        <div class="university-info">
+                            <div class="university-name">Massachusetts Institute of Technology</div>
+                            <div class="university-location">
+                                <i class="fas fa-map-marker-alt location-icon"></i>
+                                Cambridge, Massachusetts, USA
+                            </div>
+                            <div class="university-meta">
+                                <div class="rating">
+                                    <span class="stars">★★★★★</span>
+                                    <span class="rating-text">4.8/5.0</span>
+                                </div>
+                                <div class="score">97.8</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ranking-card top-3">
+                        <div class="ranking-number">3</div>
+                        <img src="images/university3.jpg" alt="Stanford University" class="university-image">
+                        <div class="university-info">
+                            <div class="university-name">Stanford University</div>
+                            <div class="university-location">
+                                <i class="fas fa-map-marker-alt location-icon"></i>
+                                Stanford, California, USA
+                            </div>
+                            <div class="university-meta">
+                                <div class="rating">
+                                    <span class="stars">★★★★★</span>
+                                    <span class="rating-text">4.7/5.0</span>
+                                </div>
+                                <div class="score">96.2</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ranking-card">
+                        <div class="ranking-number">4</div>
+                        <img src="images/university4.jpg" alt="University of Oxford" class="university-image">
+                        <div class="university-info">
+                            <div class="university-name">University of Oxford</div>
+                            <div class="university-location">
+                                <i class="fas fa-map-marker-alt location-icon"></i>
+                                Oxford, England, UK
+                            </div>
+                            <div class="university-meta">
+                                <div class="rating">
+                                    <span class="stars">★★★★★</span>
+                                    <span class="rating-text">4.6/5.0</span>
+                                </div>
+                                <div class="score">95.1</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ranking-card">
+                        <div class="ranking-number">5</div>
+                        <img src="images/university1.jpg" alt="University of Cambridge" class="university-image">
+                        <div class="university-info">
+                            <div class="university-name">University of Cambridge</div>
+                            <div class="university-location">
+                                <i class="fas fa-map-marker-alt location-icon"></i>
+                                Cambridge, England, UK
+                            </div>
+                            <div class="university-meta">
+                                <div class="rating">
+                                    <span class="stars">★★★★★</span>
+                                    <span class="rating-text">4.5/5.0</span>
+                                </div>
+                                <div class="score">94.3</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ranking-card">
+                        <div class="ranking-number">6</div>
+                        <img src="images/university2.jpg" alt="California Institute of Technology" class="university-image">
+                        <div class="university-info">
+                            <div class="university-name">California Institute of Technology</div>
+                            <div class="university-location">
+                                <i class="fas fa-map-marker-alt location-icon"></i>
+                                Pasadena, California, USA
+                            </div>
+                            <div class="university-meta">
+                                <div class="rating">
+                                    <span class="stars">★★★★★</span>
+                                    <span class="rating-text">4.4/5.0</span>
+                                </div>
+                                <div class="score">93.7</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ranking-card">
+                        <div class="ranking-number">7</div>
+                        <img src="images/university3.jpg" alt="ETH Zurich" class="university-image">
+                        <div class="university-info">
+                            <div class="university-name">ETH Zurich</div>
+                            <div class="university-location">
+                                <i class="fas fa-map-marker-alt location-icon"></i>
+                                Zurich, Switzerland
+                            </div>
+                            <div class="university-meta">
+                                <div class="rating">
+                                    <span class="stars">★★★★★</span>
+                                    <span class="rating-text">4.3/5.0</span>
+                                </div>
+                                <div class="score">92.8</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ranking-card">
+                        <div class="ranking-number">8</div>
+                        <img src="images/university4.jpg" alt="Imperial College London" class="university-image">
+                        <div class="university-info">
+                            <div class="university-name">Imperial College London</div>
+                            <div class="university-location">
+                                <i class="fas fa-map-marker-alt location-icon"></i>
+                                London, England, UK
+                            </div>
+                            <div class="university-meta">
+                                <div class="rating">
+                                    <span class="stars">★★★★★</span>
+                                    <span class="rating-text">4.2/5.0</span>
+                                </div>
+                                <div class="score">91.9</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="university_search_platform.html" class="nav-item">
+                <i class="fas fa-home nav-icon"></i>
+                <span class="nav-label">Home</span>
+            </a>
+            <a href="rankings_page.html" class="nav-item active">
+                <i class="fas fa-trophy nav-icon"></i>
+                <span class="nav-label">Ranking</span>
+            </a>
+            <a href="explore_page.html" class="nav-item">
+                <i class="fas fa-compass nav-icon"></i>
+                <span class="nav-label">Explore</span>
+            </a>
+            <a href="profile_page.html" class="nav-item">
+                <i class="fas fa-user nav-icon"></i>
+                <span class="nav-label">Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Smooth interactions and animations
+        document.querySelectorAll('.ranking-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+
+
+
+        // Dropdown functionality
+        const subjectDropdown = document.getElementById('subjectDropdown');
+        const subjectMenu = document.getElementById('subjectMenu');
+        const regionDropdown = document.getElementById('regionDropdown');
+        const regionMenu = document.getElementById('regionMenu');
+
+        // Subject dropdown
+        subjectDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.classList.toggle('active');
+            subjectMenu.classList.toggle('show');
+            
+            // Close other dropdown
+            regionDropdown.classList.remove('active');
+            regionMenu.classList.remove('show');
+        });
+
+        // Region dropdown
+        regionDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+            this.classList.toggle('active');
+            regionMenu.classList.toggle('show');
+            
+            // Close other dropdown
+            subjectDropdown.classList.remove('active');
+            subjectMenu.classList.remove('show');
+        });
+
+        // Handle dropdown item selection
+        document.querySelectorAll('#subjectMenu .dropdown-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove selected class from all items
+                document.querySelectorAll('#subjectMenu .dropdown-item').forEach(i => i.classList.remove('selected'));
+                // Add selected class to clicked item
+                this.classList.add('selected');
+                // Update button text
+                subjectDropdown.querySelector('span').textContent = this.textContent;
+                // Close dropdown
+                subjectDropdown.classList.remove('active');
+                subjectMenu.classList.remove('show');
+            });
+        });
+
+        document.querySelectorAll('#regionMenu .dropdown-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove selected class from all items
+                document.querySelectorAll('#regionMenu .dropdown-item').forEach(i => i.classList.remove('selected'));
+                // Add selected class to clicked item
+                this.classList.add('selected');
+                // Update button text
+                regionDropdown.querySelector('span').textContent = this.textContent;
+                // Close dropdown
+                regionDropdown.classList.remove('active');
+                regionMenu.classList.remove('show');
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!subjectDropdown.contains(e.target) && !regionDropdown.contains(e.target)) {
+                subjectDropdown.classList.remove('active');
+                subjectMenu.classList.remove('show');
+                regionDropdown.classList.remove('active');
+                regionMenu.classList.remove('show');
+            }
+        });
+
+        // Search functionality with debounce
+        const searchInput = document.querySelector('.search-input');
+        let searchTimeout;
+        
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const searchTerm = this.value.toLowerCase();
+                // Implement search logic here
+                console.log('Searching for:', searchTerm);
+            }, 300);
+        });
+
+        // Navigation active state
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Only prevent default for current page links
+                if (this.getAttribute('href') === window.location.pathname.split('/').pop()) {
+                    e.preventDefault();
+                }
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html> 

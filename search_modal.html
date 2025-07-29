@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - UniSearch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.08);
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            padding: 40px 24px 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
+            font-weight: 400;
+        }
+
+        /* Search Modal Overlay */
+        .search-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .search-modal.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 60px;
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 380px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Search Bar */
+        .search-header {
+            padding: 24px 24px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            position: relative;
+        }
+
+        .search-input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-input {
+            width: 100%;
+            background: #f8fafc;
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 16px 48px 16px 20px;
+            font-size: 16px;
+            color: #1e293b;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #1E40AF;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 16px;
+            color: #1E40AF;
+            font-size: 18px;
+            pointer-events: none;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        /* Search Content */
+        .search-content {
+            padding: 20px 24px 24px;
+        }
+
+        .search-section {
+            margin-bottom: 32px;
+        }
+
+        .search-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+        }
+
+        .clear-all {
+            font-size: 13px;
+            color: #1E40AF;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .clear-all:hover {
+            color: #0F766E;
+        }
+
+        /* Tags */
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .search-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.1) 0%, rgba(15, 118, 110, 0.1) 100%);
+            border: 1px solid rgba(30, 64, 175, 0.2);
+            border-radius: 20px;
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1E40AF;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            max-width: 100%;
+        }
+
+        .search-tag:hover {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.15) 0%, rgba(15, 118, 110, 0.15) 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
+        }
+
+        .search-tag.recent {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.08) 0%, rgba(15, 118, 110, 0.08) 100%);
+            border-color: rgba(30, 64, 175, 0.15);
+        }
+
+        .search-tag.trending {
+            background: linear-gradient(135deg, rgba(15, 118, 110, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%);
+            border-color: rgba(15, 118, 110, 0.2);
+            color: #0F766E;
+        }
+
+        .search-tag.trending:hover {
+            background: linear-gradient(135deg, rgba(15, 118, 110, 0.15) 0%, rgba(30, 64, 175, 0.15) 100%);
+            box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+        }
+
+        .tag-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 120px;
+        }
+
+        .remove-tag {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 12px;
+            cursor: pointer;
+            padding: 2px;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            opacity: 0.6;
+        }
+
+        .remove-tag:hover {
+            background: rgba(0, 0, 0, 0.1);
+            opacity: 1;
+        }
+
+        .trending-tag .remove-tag {
+            display: none;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 20px 20px 0 0;
+            padding: 16px 24px 32px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 32px;
+            max-width: 414px;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: #64748b;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .nav-item.active {
+            color: #1E40AF;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .search-container {
+                width: 95%;
+                margin: 0 10px;
+            }
+            
+            .search-header {
+                padding: 20px 20px 16px;
+            }
+            
+            .search-content {
+                padding: 16px 20px 20px;
+            }
+            
+            .tags-container {
+                gap: 10px;
+            }
+            
+            .search-tag {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            .search-container {
+                background: #1e293b;
+                color: #f1f5f9;
+            }
+            
+            .search-input {
+                background: #334155;
+                color: #f1f5f9;
+                border-color: #475569;
+            }
+            
+            .search-input:focus {
+                background: #475569;
+                border-color: #1E40AF;
+            }
+            
+            .search-input::placeholder {
+                color: #94a3b8;
+            }
+            
+            .section-title {
+                color: #f1f5f9;
+            }
+            
+            .search-tag {
+                background: linear-gradient(135deg, rgba(30, 64, 175, 0.2) 0%, rgba(15, 118, 110, 0.2) 100%);
+                border-color: rgba(30, 64, 175, 0.3);
+                color: #60a5fa;
+            }
+            
+            .search-tag.trending {
+                background: linear-gradient(135deg, rgba(15, 118, 110, 0.2) 0%, rgba(30, 64, 175, 0.2) 100%);
+                border-color: rgba(15, 118, 110, 0.3);
+                color: #5eead4;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="header-content">
+                <h1>Search</h1>
+                <p>Find universities, courses, and more</p>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div style="padding: 40px 24px; text-align: center;">
+                <h2 style="margin-bottom: 16px; color: #1e293b;">Click the search bar to open search modal</h2>
+                <p style="color: #64748b;">This demonstrates the search functionality</p>
+            </div>
+        </div>
+
+        <!-- Search Modal -->
+        <div class="search-modal" id="searchModal">
+            <div class="search-container">
+                <!-- Search Header -->
+                <div class="search-header">
+                    <button class="close-btn" onclick="closeSearchModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="search-input-container">
+                        <input type="text" class="search-input" placeholder="Search universities, courses, countries..." id="searchInput">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Search Content -->
+                <div class="search-content">
+                    <!-- Recent Searches -->
+                    <div class="search-section">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <div class="section-icon">
+                                    <i class="fas fa-history"></i>
+                                </div>
+                                Recent Searches
+                            </div>
+                            <span class="clear-all" onclick="clearRecentSearches()">Clear All</span>
+                        </div>
+                        <div class="tags-container" id="recentSearches">
+                            <div class="search-tag recent">
+                                <span class="tag-text">Harvard University</span>
+                                <button class="remove-tag" onclick="removeTag(this, 'recent')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="search-tag recent">
+                                <span class="tag-text">Computer Science</span>
+                                <button class="remove-tag" onclick="removeTag(this, 'recent')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="search-tag recent">
+                                <span class="tag-text">United States</span>
+                                <button class="remove-tag" onclick="removeTag(this, 'recent')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="search-tag recent">
+                                <span class="tag-text">Engineering</span>
+                                <button class="remove-tag" onclick="removeTag(this, 'recent')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trending Searches -->
+                    <div class="search-section">
+                        <div class="section-header">
+                            <div class="section-title">
+                                <div class="section-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                Trending Searches
+                            </div>
+                        </div>
+                        <div class="tags-container" id="trendingSearches">
+                            <div class="search-tag trending">
+                                <span class="tag-text">Artificial Intelligence</span>
+                            </div>
+                            <div class="search-tag trending">
+                                <span class="tag-text">Data Science</span>
+                            </div>
+                            <div class="search-tag trending">
+                                <span class="tag-text">United Kingdom</span>
+                            </div>
+                            <div class="search-tag trending">
+                                <span class="tag-text">Business Administration</span>
+                            </div>
+                            <div class="search-tag trending">
+                                <span class="tag-text">Canada</span>
+                            </div>
+                            <div class="search-tag trending">
+                                <span class="tag-text">Medicine</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="university_search_platform.html" class="nav-item">
+                <i class="fas fa-home nav-icon"></i>
+                <span class="nav-label">Home</span>
+            </a>
+            <a href="rankings_page.html" class="nav-item">
+                <i class="fas fa-trophy nav-icon"></i>
+                <span class="nav-label">Ranking</span>
+            </a>
+            <a href="explore_page.html" class="nav-item">
+                <i class="fas fa-compass nav-icon"></i>
+                <span class="nav-label">Explore</span>
+            </a>
+            <a href="profile_page.html" class="nav-item">
+                <i class="fas fa-user nav-icon"></i>
+                <span class="nav-label">Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Search Modal Functions
+        function openSearchModal() {
+            const modal = document.getElementById('searchModal');
+            modal.classList.add('active');
+            document.getElementById('searchInput').focus();
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSearchModal() {
+            const modal = document.getElementById('searchModal');
+            modal.classList.remove('active');
+            
+            // Restore body scroll
+            document.body.style.overflow = '';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('searchModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSearchModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeSearchModal();
+            }
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            
+            // Filter recent searches
+            const recentTags = document.querySelectorAll('#recentSearches .search-tag');
+            recentTags.forEach(tag => {
+                const text = tag.querySelector('.tag-text').textContent.toLowerCase();
+                if (text.includes(query)) {
+                    tag.style.display = 'inline-flex';
+                } else {
+                    tag.style.display = 'none';
+                }
+            });
+
+            // Filter trending searches
+            const trendingTags = document.querySelectorAll('#trendingSearches .search-tag');
+            trendingTags.forEach(tag => {
+                const text = tag.querySelector('.tag-text').textContent.toLowerCase();
+                if (text.includes(query)) {
+                    tag.style.display = 'inline-flex';
+                } else {
+                    tag.style.display = 'none';
+                }
+            });
+        });
+
+        // Tag functionality
+        function removeTag(button, type) {
+            const tag = button.parentElement;
+            tag.style.animation = 'fadeOut 0.3s ease';
+            
+            setTimeout(() => {
+                tag.remove();
+                
+                // Check if section is empty
+                const container = type === 'recent' ? 
+                    document.getElementById('recentSearches') : 
+                    document.getElementById('trendingSearches');
+                
+                if (container.children.length === 0) {
+                    showEmptyState(container, type);
+                }
+            }, 300);
+        }
+
+        function showEmptyState(container, type) {
+            const emptyState = document.createElement('div');
+            emptyState.className = 'empty-state';
+            emptyState.innerHTML = `
+                <div class="empty-icon">
+                    <i class="fas fa-${type === 'recent' ? 'history' : 'fire'}"></i>
+                </div>
+                <div class="empty-text">
+                    No ${type === 'recent' ? 'recent' : 'trending'} searches
+                </div>
+            `;
+            container.appendChild(emptyState);
+        }
+
+        function clearRecentSearches() {
+            const container = document.getElementById('recentSearches');
+            container.innerHTML = '';
+            showEmptyState(container, 'recent');
+        }
+
+        // Tag click functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.search-tag')) {
+                const tag = e.target.closest('.search-tag');
+                const text = tag.querySelector('.tag-text').textContent;
+                
+                // Don't trigger if clicking remove button
+                if (!e.target.closest('.remove-tag')) {
+                    document.getElementById('searchInput').value = text;
+                    // Add to recent searches if not already there
+                    addToRecentSearches(text);
+                }
+            }
+        });
+
+        function addToRecentSearches(text) {
+            const container = document.getElementById('recentSearches');
+            
+            // Check if already exists
+            const existingTags = container.querySelectorAll('.tag-text');
+            for (let tag of existingTags) {
+                if (tag.textContent === text) {
+                    return;
+                }
+            }
+
+            // Remove empty state if present
+            const emptyState = container.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+            }
+
+            // Add new tag
+            const newTag = document.createElement('div');
+            newTag.className = 'search-tag recent';
+            newTag.innerHTML = `
+                <span class="tag-text">${text}</span>
+                <button class="remove-tag" onclick="removeTag(this, 'recent')">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            container.insertBefore(newTag, container.firstChild);
+            
+            // Limit to 8 recent searches
+            const tags = container.querySelectorAll('.search-tag');
+            if (tags.length > 8) {
+                tags[tags.length - 1].remove();
+            }
+        }
+
+        // Demo: Open modal on page load
+        setTimeout(() => {
+            openSearchModal();
+        }, 1000);
+    </script>
+</body>
+</html> 

@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Science - UniSearch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.08);
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            padding: 40px 24px 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
+            font-weight: 400;
+        }
+
+        /* Content */
+        .content {
+            padding: 32px 24px 100px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Subject Introduction */
+        .subject-intro {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subject-intro::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1E40AF, #0F766E);
+        }
+
+        .subject-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1E40AF;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .subject-description {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .subject-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(100, 116, 139, 0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0F766E;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Courses */
+        .courses-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .course-item {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #0F766E, #1E40AF);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .course-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border-color: #e2e8f0;
+        }
+
+        .course-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .course-item.expanded {
+            background: linear-gradient(135deg, rgba(15, 118, 110, 0.05) 0%, rgba(30, 64, 175, 0.05) 100%);
+        }
+
+        .course-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .course-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0F766E;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .course-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, rgba(15, 118, 110, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0F766E;
+            font-size: 10px;
+        }
+
+        .course-description {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, margin-top 0.3s ease;
+            margin-top: 0;
+        }
+
+        .course-item.expanded .course-description {
+            max-height: 100px;
+            margin-top: 12px;
+        }
+
+        .expand-icon {
+            color: #0F766E;
+            font-size: 14px;
+            transition: transform 0.3s ease;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(15, 118, 110, 0.1);
+        }
+
+        .course-item:hover .expand-icon {
+            background: rgba(15, 118, 110, 0.2);
+        }
+
+        .course-item.expanded .expand-icon {
+            transform: rotate(180deg);
+            background: rgba(15, 118, 110, 0.2);
+        }
+
+        /* Main Branches */
+        .branches-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .branch-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .branch-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0F766E, #1E40AF);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .branch-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border-color: #e2e8f0;
+        }
+
+        .branch-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .branch-image {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(15, 118, 110, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0F766E;
+            font-size: 24px;
+            margin: 0 auto 12px;
+            border: 1px solid rgba(15, 118, 110, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .branch-card:hover .branch-image {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, rgba(15, 118, 110, 0.2) 0%, rgba(30, 64, 175, 0.2) 100%);
+        }
+
+        .branch-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0F766E;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .branch-description {
+            font-size: 12px;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        /* Related Careers */
+        .careers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .career-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .career-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #1E40AF, #0F766E);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .career-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border-color: #e2e8f0;
+        }
+
+        .career-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .career-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.1) 0%, rgba(15, 118, 110, 0.1) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1E40AF;
+            font-size: 20px;
+            border: 1px solid rgba(30, 64, 175, 0.2);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .career-card:hover .career-icon {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.2) 0%, rgba(15, 118, 110, 0.2) 100%);
+        }
+
+        .career-content {
+            flex: 1;
+        }
+
+        .career-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .career-description {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        /* Floating Action Button */
+        .floating-action {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.4);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            z-index: 50;
+        }
+
+        .floating-action:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(30, 64, 175, 0.5);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 20px 20px 0 0;
+            padding: 16px 24px 32px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 32px;
+            max-width: 414px;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-decoration: none;
+            color: #64748b;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .nav-item.active {
+            color: #1E40AF;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+            }
+            
+            .header {
+                padding: 30px 20px 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .content {
+                padding: 24px 20px 100px;
+            }
+            
+            .subject-intro {
+                padding: 24px;
+            }
+            
+            .subject-title {
+                font-size: 20px;
+            }
+            
+            .branches-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .branch-card {
+                padding: 16px;
+            }
+            
+            .career-card {
+                padding: 16px;
+                gap: 12px;
+            }
+            
+            .career-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            
+            .bottom-nav {
+                padding: 12px 20px 28px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="header-content">
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1>Computer Science</h1>
+                <p>Programming, algorithms, and software development</p>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Subject Introduction -->
+            <div class="subject-intro">
+                <div class="subject-title">Computer Science</div>
+                <div class="subject-description">
+                    Computer Science is the study of computers and computational systems. It encompasses both theoretical and practical aspects, including programming, algorithms, data structures, software engineering, artificial intelligence, and computer networks.
+                </div>
+                <div class="subject-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">2,500+</span>
+                        <span class="stat-label">Courses</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">180+</span>
+                        <span class="stat-label">Universities</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label">Employment</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Courses -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        Main Courses
+                    </div>
+                </div>
+                
+                <div class="courses-list">
+                    <div class="course-item" onclick="toggleCourse(this)">
+                        <div class="course-header">
+                            <div class="course-name">
+                                <div class="course-icon">
+                                    <i class="fas fa-code"></i>
+                                </div>
+                                Programming Fundamentals
+                            </div>
+                            <i class="fas fa-chevron-down expand-icon"></i>
+                        </div>
+                        <div class="course-description">
+                            Introduction to programming concepts, algorithms, and problem-solving techniques using modern programming languages.
+                        </div>
+                    </div>
+
+                    <div class="course-item" onclick="toggleCourse(this)">
+                        <div class="course-header">
+                            <div class="course-name">
+                                <div class="course-icon">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                Data Structures & Algorithms
+                            </div>
+                            <i class="fas fa-chevron-down expand-icon"></i>
+                        </div>
+                        <div class="course-description">
+                            Study of fundamental data structures, algorithm design, and analysis of computational complexity.
+                        </div>
+                    </div>
+
+                    <div class="course-item" onclick="toggleCourse(this)">
+                        <div class="course-header">
+                            <div class="course-name">
+                                <div class="course-icon">
+                                    <i class="fas fa-cogs"></i>
+                                </div>
+                                Software Engineering
+                            </div>
+                            <i class="fas fa-chevron-down expand-icon"></i>
+                        </div>
+                        <div class="course-description">
+                            Principles and practices of software development, including design patterns, testing, and project management.
+                        </div>
+                    </div>
+
+                    <div class="course-item" onclick="toggleCourse(this)">
+                        <div class="course-header">
+                            <div class="course-name">
+                                <div class="course-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                Artificial Intelligence
+                            </div>
+                            <i class="fas fa-chevron-down expand-icon"></i>
+                        </div>
+                        <div class="course-description">
+                            Introduction to AI concepts, machine learning algorithms, and intelligent system design.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Branches -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        Main Branches
+                    </div>
+                </div>
+                
+                <div class="branches-grid">
+                    <div class="branch-card" onclick="navigateToBranch('Software Development')">
+                        <div class="branch-image">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="branch-name">Software Development</div>
+                        <div class="branch-description">Application development, web development, and mobile app creation</div>
+                    </div>
+
+                    <div class="branch-card" onclick="navigateToBranch('Data Science')">
+                        <div class="branch-image">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="branch-name">Data Science</div>
+                        <div class="branch-description">Data analysis, machine learning, and statistical modeling</div>
+                    </div>
+
+                    <div class="branch-card" onclick="navigateToBranch('Cybersecurity')">
+                        <div class="branch-image">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="branch-name">Cybersecurity</div>
+                        <div class="branch-description">Network security, cryptography, and ethical hacking</div>
+                    </div>
+
+                    <div class="branch-card" onclick="navigateToBranch('Computer Networks')">
+                        <div class="branch-image">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <div class="branch-name">Computer Networks</div>
+                        <div class="branch-description">Network architecture, protocols, and distributed systems</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Careers -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="section-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        Related Careers
+                    </div>
+                </div>
+                
+                <div class="careers-list">
+                    <div class="career-card" onclick="navigateToCareer('Software Engineer')">
+                        <div class="career-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="career-content">
+                            <div class="career-title">Software Engineer</div>
+                            <div class="career-description">Design, develop, and maintain software applications and systems</div>
+                        </div>
+                    </div>
+
+                    <div class="career-card" onclick="navigateToCareer('Data Scientist')">
+                        <div class="career-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="career-content">
+                            <div class="career-title">Data Scientist</div>
+                            <div class="career-description">Analyze complex data sets to help organizations make informed decisions</div>
+                        </div>
+                    </div>
+
+                    <div class="career-card" onclick="navigateToCareer('Cybersecurity Analyst')">
+                        <div class="career-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="career-content">
+                            <div class="career-title">Cybersecurity Analyst</div>
+                            <div class="career-description">Protect systems and networks from cyber threats and attacks</div>
+                        </div>
+                    </div>
+
+                    <div class="career-card" onclick="navigateToCareer('Product Manager')">
+                        <div class="career-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="career-content">
+                            <div class="career-title">Product Manager</div>
+                            <div class="career-description">Lead product development and manage software product lifecycles</div>
+                        </div>
+                    </div>
+
+                    <div class="career-card" onclick="navigateToCareer('AI/ML Engineer')">
+                        <div class="career-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="career-content">
+                            <div class="career-title">AI/ML Engineer</div>
+                            <div class="career-description">Develop and implement artificial intelligence and machine learning solutions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Action Button -->
+        <div class="floating-action" onclick="scrollToTop()">
+            <i class="fas fa-arrow-up"></i>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="university_search_platform.html" class="nav-item">
+                <i class="fas fa-home nav-icon"></i>
+                <span class="nav-label">Home</span>
+            </a>
+            <a href="rankings_page.html" class="nav-item">
+                <i class="fas fa-trophy nav-icon"></i>
+                <span class="nav-label">Ranking</span>
+            </a>
+            <a href="explore_page.html" class="nav-item">
+                <i class="fas fa-compass nav-icon"></i>
+                <span class="nav-label">Explore</span>
+            </a>
+            <a href="profile_page.html" class="nav-item">
+                <i class="fas fa-user nav-icon"></i>
+                <span class="nav-label">Profile</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functions
+        function goBack() {
+            window.history.back();
+        }
+
+        function toggleCourse(courseItem) {
+            courseItem.classList.toggle('expanded');
+            
+            // Add click animation
+            courseItem.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                courseItem.style.transform = '';
+            }, 150);
+
+            // Smooth scroll to expanded item
+            if (courseItem.classList.contains('expanded')) {
+                setTimeout(() => {
+                    courseItem.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'nearest' 
+                    });
+                }, 300);
+            }
+        }
+
+        function navigateToBranch(branchName) {
+            // Add click animation
+            event.currentTarget.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                event.currentTarget.style.transform = '';
+            }, 150);
+            
+            // Add haptic feedback (if supported)
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+            
+            console.log('Navigating to branch:', branchName);
+            // Add navigation logic here
+        }
+
+        function navigateToCareer(careerName) {
+            // Add click animation
+            event.currentTarget.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                event.currentTarget.style.transform = '';
+            }, 150);
+            
+            // Add haptic feedback (if supported)
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+            
+            console.log('Navigating to career:', careerName);
+            // Add navigation logic here
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Show/hide floating action button based on scroll
+        window.addEventListener('scroll', function() {
+            const floatingAction = document.querySelector('.floating-action');
+            if (window.scrollY > 300) {
+                floatingAction.style.opacity = '1';
+                floatingAction.style.transform = 'translateY(0)';
+            } else {
+                floatingAction.style.opacity = '0';
+                floatingAction.style.transform = 'translateY(20px)';
+            }
+        });
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+
+            // Initialize floating action button
+            const floatingAction = document.querySelector('.floating-action');
+            floatingAction.style.opacity = '0';
+            floatingAction.style.transform = 'translateY(20px)';
+            floatingAction.style.transition = 'all 0.3s ease';
+        });
+
+        // Smooth scroll for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                goBack();
+            }
+        });
+
+        // Add touch feedback for mobile
+        document.addEventListener('touchstart', function() {}, {passive: true});
+    </script>
+</body>
+</html> 

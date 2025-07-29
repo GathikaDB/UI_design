@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSearch - Country Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.08);
+        }
+
+        /* Header with Back Button */
+        .header {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            padding: 40px 24px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-button {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-2px);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            flex: 1;
+        }
+
+        /* Top Image Section */
+        .hero-image {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        /* Introduction Section */
+        .introduction {
+            padding: 32px 24px 24px;
+            background: white;
+        }
+
+        .country-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1E40AF;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .country-intro {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        /* Country Guide Section */
+        .country-guide {
+            padding: 0 24px 32px;
+        }
+
+        .guide-section {
+            margin-bottom: 16px;
+        }
+
+        .guide-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0F766E;
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            cursor: pointer;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .guide-title:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+        }
+
+        .guide-title-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .guide-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #0F766E 0%, #1E40AF 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .guide-arrow {
+            width: 24px;
+            height: 24px;
+            background: rgba(15, 118, 110, 0.1);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0F766E;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .guide-title.active .guide-arrow {
+            transform: rotate(180deg);
+        }
+
+        .guide-content {
+            font-size: 15px;
+            color: #64748b;
+            line-height: 1.6;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 0 0 16px 16px;
+            border-left: 4px solid #0F766E;
+            margin-top: -1px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .guide-content.active {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Data Cards Section */
+        .data-section {
+            padding: 0 24px 32px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .data-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 20px;
+            padding: 24px 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .data-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #1E40AF, #0F766E);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            z-index: 2;
+        }
+
+        .data-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .data-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .data-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            margin: 0 auto 16px;
+        }
+
+        .data-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1E40AF;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .data-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Cities Section */
+        .cities-section {
+            padding: 0 24px 32px;
+        }
+
+        .cities-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 8px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .cities-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .city-card {
+            min-width: 200px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .city-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #0F766E, #1E40AF);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            z-index: 2;
+        }
+
+        .city-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .city-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .city-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .city-card:hover .city-image {
+            transform: scale(1.02);
+        }
+
+        .city-content {
+            padding: 16px;
+            text-align: center;
+        }
+
+        .city-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0F766E;
+            line-height: 1.3;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .data-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .data-card {
+                padding: 20px 16px;
+            }
+
+            .data-value {
+                font-size: 22px;
+            }
+
+            .city-card {
+                min-width: 180px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <button class="back-button" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1>Country Details</h1>
+            </div>
+        </div>
+
+        <!-- Hero Image -->
+        <div class="hero-image">
+            <img src="images/usa.jpg" alt="United States" id="countryImage">
+        </div>
+
+        <!-- Introduction -->
+        <div class="introduction fade-in">
+            <h2 class="country-title" id="countryTitle">United States</h2>
+            <p class="country-intro" id="countryIntro">
+                The United States offers world-class education with diverse cultural experiences, cutting-edge research opportunities, and a dynamic learning environment. Home to prestigious universities and innovative programs, the US provides international students with unparalleled academic and career prospects.
+            </p>
+        </div>
+
+        <!-- Country Guide -->
+        <div class="country-guide">
+            <div class="guide-section fade-in">
+                <h3 class="guide-title" onclick="toggleSection('generalInfo')">
+                    <div class="guide-title-left">
+                        <div class="guide-icon">
+                            <i class="fas fa-info"></i>
+                        </div>
+                        General Information
+                    </div>
+                    <div class="guide-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </h3>
+                <div class="guide-content" id="generalInfo">
+                    The United States boasts one of the world's most diverse and comprehensive education systems, with over 4,000 accredited institutions. The country's higher education emphasizes critical thinking, research, and practical application. International students benefit from flexible academic programs, state-of-the-art facilities, and a multicultural campus environment that prepares them for global careers.
+                </div>
+            </div>
+
+            <div class="guide-section fade-in">
+                <h3 class="guide-title" onclick="toggleSection('visaInfo')">
+                    <div class="guide-title-left">
+                        <div class="guide-icon">
+                            <i class="fas fa-passport"></i>
+                        </div>
+                        Visa & Work Permit
+                    </div>
+                    <div class="guide-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </h3>
+                <div class="guide-content" id="visaInfo">
+                    International students typically apply for an F-1 student visa, which allows full-time study at accredited institutions. The application requires proof of acceptance, financial support, and intent to return home. Students can work on-campus up to 20 hours per week and may be eligible for Optional Practical Training (OPT) after graduation for up to 12 months, with STEM extensions available.
+                </div>
+            </div>
+
+            <div class="guide-section fade-in">
+                <h3 class="guide-title" onclick="toggleSection('whyStudy')">
+                    <div class="guide-title-left">
+                        <div class="guide-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        Why Study in This Country
+                    </div>
+                    <div class="guide-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </h3>
+                <div class="guide-content" id="whyStudy">
+                    The US offers exceptional academic quality with globally recognized degrees, extensive research opportunities, and strong industry connections. Students gain access to cutting-edge technology, diverse cultural experiences, and a robust alumni network. The flexible education system allows customization of study paths, while the entrepreneurial ecosystem provides excellent career prospects and innovation opportunities.
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Cards -->
+        <div class="data-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    Key Statistics
+                </h3>
+            </div>
+            <div class="data-grid">
+                <div class="data-card fade-in">
+                    <div class="data-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="data-value" id="costOfLiving">$15,000</div>
+                    <div class="data-label">Cost of Living (Annual)</div>
+                </div>
+                <div class="data-card fade-in">
+                    <div class="data-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="data-value" id="internationalStudents">5.6%</div>
+                    <div class="data-label">International Students</div>
+                </div>
+                <div class="data-card fade-in">
+                    <div class="data-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="data-value" id="avgSalary">$65,000</div>
+                    <div class="data-label">Average Annual Salary</div>
+                </div>
+                <div class="data-card fade-in">
+                    <div class="data-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="data-value" id="topUniversities">156</div>
+                    <div class="data-label">Top 1000 Universities</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cities Section -->
+        <div class="cities-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    Cities to Study
+                </h3>
+            </div>
+            <div class="cities-scroll">
+                <div class="city-card fade-in" onclick="showCityDetails('New York')">
+                    <img src="images/university1.jpg" alt="New York" class="city-image">
+                    <div class="city-content">
+                        <h4 class="city-name">New York</h4>
+                    </div>
+                </div>
+                <div class="city-card fade-in" onclick="showCityDetails('Boston')">
+                    <img src="images/university2.jpg" alt="Boston" class="city-image">
+                    <div class="city-content">
+                        <h4 class="city-name">Boston</h4>
+                    </div>
+                </div>
+                <div class="city-card fade-in" onclick="showCityDetails('San Francisco')">
+                    <img src="images/university3.jpg" alt="San Francisco" class="city-image">
+                    <div class="city-content">
+                        <h4 class="city-name">San Francisco</h4>
+                    </div>
+                </div>
+                <div class="city-card fade-in" onclick="showCityDetails('Los Angeles')">
+                    <img src="images/university4.jpg" alt="Los Angeles" class="city-image">
+                    <div class="city-content">
+                        <h4 class="city-name">Los Angeles</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample country data - in a real app, this would come from an API
+        const countryData = {
+            'usa': {
+                name: 'United States',
+                image: 'images/usa.jpg',
+                intro: 'The United States offers world-class education with diverse cultural experiences, cutting-edge research opportunities, and a dynamic learning environment. Home to prestigious universities and innovative programs, the US provides international students with unparalleled academic and career prospects.',
+                generalInfo: 'The United States boasts one of the world\'s most diverse and comprehensive education systems, with over 4,000 accredited institutions. The country\'s higher education emphasizes critical thinking, research, and practical application. International students benefit from flexible academic programs, state-of-the-art facilities, and a multicultural campus environment that prepares them for global careers.',
+                visaInfo: 'International students typically apply for an F-1 student visa, which allows full-time study at accredited institutions. The application requires proof of acceptance, financial support, and intent to return home. Students can work on-campus up to 20 hours per week and may be eligible for Optional Practical Training (OPT) after graduation for up to 12 months, with STEM extensions available.',
+                whyStudy: 'The US offers exceptional academic quality with globally recognized degrees, extensive research opportunities, and strong industry connections. Students gain access to cutting-edge technology, diverse cultural experiences, and a robust alumni network. The flexible education system allows customization of study paths, while the entrepreneurial ecosystem provides excellent career prospects and innovation opportunities.',
+                stats: {
+                    costOfLiving: '$15,000',
+                    internationalStudents: '5.6%',
+                    avgSalary: '$65,000',
+                    topUniversities: '156'
+                }
+            },
+            'uk': {
+                name: 'United Kingdom',
+                image: 'images/uk.jpg',
+                intro: 'The United Kingdom combines centuries of academic tradition with modern innovation, offering prestigious universities and a rich cultural heritage. International students benefit from world-renowned institutions, diverse study options, and excellent career opportunities in a global hub.',
+                generalInfo: 'The UK education system is known for its high academic standards and rigorous quality assurance. With over 160 universities and colleges, students can choose from a wide range of programs. The UK emphasizes independent learning, critical analysis, and research skills, preparing students for global success.',
+                visaInfo: 'International students need a Student visa (Tier 4) for courses longer than 6 months. Requirements include proof of acceptance, financial support, and English language proficiency. Students can work up to 20 hours per week during term time and full-time during holidays. Post-study work opportunities are available through the Graduate Route.',
+                whyStudy: 'The UK offers world-class education with globally recognized qualifications, cutting-edge research facilities, and strong industry links. Students experience rich cultural diversity, historical heritage, and excellent career prospects. The UK\'s central location provides easy access to Europe and global opportunities.',
+                stats: {
+                    costOfLiving: '$12,000',
+                    internationalStudents: '19.6%',
+                    avgSalary: '$45,000',
+                    topUniversities: '89'
+                }
+            },
+            'canada': {
+                name: 'Canada',
+                image: 'images/canada.jpg',
+                intro: 'Canada offers a welcoming environment for international students with high-quality education, multicultural cities, and excellent quality of life. Known for its inclusive society and strong research programs, Canada provides outstanding opportunities for academic and personal growth.',
+                generalInfo: 'Canada\'s education system is consistently ranked among the best globally, with over 100 universities and colleges. The country emphasizes innovation, research, and practical learning. International students enjoy a safe, welcoming environment with excellent support services and opportunities for permanent residency.',
+                visaInfo: 'International students need a Study Permit for programs longer than 6 months. Requirements include acceptance letter, proof of funds, and medical examination. Students can work up to 20 hours per week during studies and full-time during breaks. Post-graduation work permits are available for up to 3 years.',
+                whyStudy: 'Canada offers affordable, high-quality education with globally recognized degrees, excellent research opportunities, and strong industry connections. Students benefit from a safe, multicultural environment, excellent healthcare, and pathways to permanent residency. The country\'s natural beauty and high quality of life enhance the student experience.',
+                stats: {
+                    costOfLiving: '$10,000',
+                    internationalStudents: '21.4%',
+                    avgSalary: '$55,000',
+                    topUniversities: '26'
+                }
+            }
+        };
+
+        // Function to load country data
+        function loadCountryData(countryCode) {
+            const country = countryData[countryCode];
+            if (!country) return;
+
+            document.getElementById('countryImage').src = country.image;
+            document.getElementById('countryTitle').textContent = country.name;
+            document.getElementById('countryIntro').textContent = country.intro;
+            document.getElementById('generalInfo').textContent = country.generalInfo;
+            document.getElementById('visaInfo').textContent = country.visaInfo;
+            document.getElementById('whyStudy').textContent = country.whyStudy;
+            document.getElementById('costOfLiving').textContent = country.stats.costOfLiving;
+            document.getElementById('internationalStudents').textContent = country.stats.internationalStudents;
+            document.getElementById('avgSalary').textContent = country.stats.avgSalary;
+            document.getElementById('topUniversities').textContent = country.stats.topUniversities;
+        }
+
+        // Function to toggle collapsible sections
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId);
+            const title = content.previousElementSibling;
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                title.classList.remove('active');
+            } else {
+                content.classList.add('active');
+                title.classList.add('active');
+            }
+        }
+
+        // Function to show city details (placeholder for future functionality)
+        function showCityDetails(cityName) {
+            console.log(`Showing details for ${cityName}`);
+            // In a real app, this would navigate to a city details page or show a modal
+        }
+
+        // Add smooth scroll behavior for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add intersection observer for fade-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all fade-in elements
+            document.querySelectorAll('.fade-in').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+
+            // Load default country data (USA)
+            loadCountryData('usa');
+        });
+
+        // Add URL parameter support for different countries
+        const urlParams = new URLSearchParams(window.location.search);
+        const country = urlParams.get('country');
+        if (country && countryData[country]) {
+            loadCountryData(country);
+        }
+    </script>
+</body>
+</html> 
