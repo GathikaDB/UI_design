@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSearch - University Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.08);
+        }
+
+        /* Header with Back Button */
+        .header {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            padding: 40px 24px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-button {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-2px);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            flex: 1;
+        }
+
+        /* Top Image Section */
+        .hero-image {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        /* University Name & Overview */
+        .university-info {
+            padding: 32px 24px 24px;
+            background: white;
+        }
+
+        .university-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1E40AF;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .university-overview {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid rgba(255,255,255,0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #0F766E 0%, #1E40AF 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            margin: 0 auto 12px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1E40AF;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* University Details Sections */
+        .details-section {
+            padding: 0 24px 32px;
+        }
+
+        .detail-item {
+            margin-bottom: 32px;
+        }
+
+        .detail-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .detail-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #0F766E 0%, #1E40AF 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .detail-content {
+            font-size: 15px;
+            color: #64748b;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        /* Programs Accordion */
+        .programs-list {
+            margin-top: 16px;
+        }
+
+        .program-category {
+            margin-bottom: 12px;
+        }
+
+        .program-category-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 8px;
+        }
+
+        .program-item {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .program-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .program-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .program-duration {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Subject Areas Grid */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .subject-item {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid rgba(255,255,255,0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .subject-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+        }
+
+        .subject-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #0F766E 0%, #1E40AF 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            margin: 0 auto 12px;
+        }
+
+        .subject-name {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Related Links Section */
+        .links-section {
+            padding: 0 24px 32px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .link-item {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid rgba(255,255,255,0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .link-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+            background: rgba(15, 118, 110, 0.05);
+        }
+
+        .link-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #0F766E 0%, #1E40AF 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            margin: 0 auto 8px;
+        }
+
+        .link-text {
+            font-size: 12px;
+            font-weight: 500;
+            color: #0F766E;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .quick-stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .subjects-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .links-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <button class="back-button" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1>University Details</h1>
+            </div>
+        </div>
+
+        <!-- Hero Image -->
+        <div class="hero-image">
+            <img src="images/university1.jpg" alt="University Campus" id="universityImage">
+        </div>
+
+        <!-- University Info -->
+        <div class="university-info fade-in">
+            <h2 class="university-name" id="universityName">Harvard University</h2>
+            <p class="university-overview" id="universityOverview">
+                Founded in 1636, Harvard University is a private Ivy League research university in Cambridge, Massachusetts. It is the oldest institution of higher learning in the United States and consistently ranks among the world's top universities. Harvard offers a comprehensive range of undergraduate and graduate programs across various disciplines.
+            </p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="university-info">
+            <div class="quick-stats">
+                <div class="stat-item fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-value" id="ranking">#2</div>
+                    <div class="stat-label">Global Ranking</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value" id="totalStudents">31,000+</div>
+                    <div class="stat-label">Total Students</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="stat-value" id="internationalStudents">22%</div>
+                    <div class="stat-label">International</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="stat-value" id="programs">350+</div>
+                    <div class="stat-label">Programs</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- University Details Sections -->
+        <div class="details-section">
+            <div class="detail-item fade-in">
+                <h3 class="detail-title">
+                    <div class="detail-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    Subject Areas
+                </h3>
+                <div class="detail-content">
+                    <div class="subjects-grid">
+                        <div class="subject-item">
+                            <div class="subject-icon">
+                                <i class="fas fa-laptop-code"></i>
+                            </div>
+                            <div class="subject-name">Computer Science</div>
+                        </div>
+                        <div class="subject-item">
+                            <div class="subject-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="subject-name">Business & Economics</div>
+                        </div>
+                        <div class="subject-item">
+                            <div class="subject-icon">
+                                <i class="fas fa-flask"></i>
+                            </div>
+                            <div class="subject-name">Engineering</div>
+                        </div>
+                        <div class="subject-item">
+                            <div class="subject-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <div class="subject-name">Medicine & Health</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-item fade-in">
+                <h3 class="detail-title">
+                    <div class="detail-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    Programs Offered
+                </h3>
+                <div class="detail-content">
+                    <div class="programs-list">
+                        <div class="program-category">
+                            <div class="program-category-title">Undergraduate Programs</div>
+                            <div class="program-item">
+                                <div class="program-name">Bachelor of Arts (BA)</div>
+                                <div class="program-duration">4 years</div>
+                            </div>
+                            <div class="program-item">
+                                <div class="program-name">Bachelor of Science (BS)</div>
+                                <div class="program-duration">4 years</div>
+                            </div>
+                        </div>
+                        <div class="program-category">
+                            <div class="program-category-title">Graduate Programs</div>
+                            <div class="program-item">
+                                <div class="program-name">Master of Business Administration (MBA)</div>
+                                <div class="program-duration">2 years</div>
+                            </div>
+                            <div class="program-item">
+                                <div class="program-name">Doctor of Philosophy (PhD)</div>
+                                <div class="program-duration">5-7 years</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-item fade-in">
+                <h3 class="detail-title">
+                    <div class="detail-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    Campus & Facilities
+                </h3>
+                <div class="detail-content" id="campusInfo">
+                    Harvard's main campus spans 209 acres in Cambridge, featuring historic buildings, modern research facilities, extensive libraries, state-of-the-art laboratories, sports complexes, and student housing. The campus includes the Harvard Yard, libraries, museums, and research centers.
+                </div>
+            </div>
+
+            <div class="detail-item fade-in">
+                <h3 class="detail-title">
+                    <div class="detail-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    International Students
+                </h3>
+                <div class="detail-content" id="internationalInfo">
+                    Harvard provides comprehensive support for international students including visa assistance, orientation programs, cultural events, and dedicated advisors. The university offers various housing options and ensures a welcoming environment for students from over 150 countries.
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Links Section -->
+        <div class="links-section">
+            <h3 class="section-title fade-in">
+                <div class="section-icon">
+                    <i class="fas fa-link"></i>
+                </div>
+                Related Links
+            </h3>
+            <div class="links-grid">
+                <a href="#" class="link-item fade-in" onclick="openLink('website')">
+                    <div class="link-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="link-text">Official Website</div>
+                </a>
+                <a href="#" class="link-item fade-in" onclick="openLink('social')">
+                    <div class="link-icon">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <div class="link-text">Social Media</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample university data
+        const universityData = {
+            'harvard': {
+                name: 'Harvard University',
+                image: 'images/university1.jpg',
+                overview: 'Founded in 1636, Harvard University is a private Ivy League research university in Cambridge, Massachusetts. It is the oldest institution of higher learning in the United States and consistently ranks among the world\'s top universities. Harvard offers a comprehensive range of undergraduate and graduate programs across various disciplines.',
+                stats: {
+                    ranking: '#2',
+                    totalStudents: '31,000+',
+                    internationalStudents: '22%',
+                    programs: '350+'
+                },
+
+                campusInfo: 'Harvard\'s main campus spans 209 acres in Cambridge, featuring historic buildings, modern research facilities, extensive libraries, state-of-the-art laboratories, sports complexes, and student housing. The campus includes the Harvard Yard, libraries, museums, and research centers.',
+                internationalInfo: 'Harvard provides comprehensive support for international students including visa assistance, orientation programs, cultural events, and dedicated advisors. The university offers various housing options and ensures a welcoming environment for students from over 150 countries.'
+            },
+            'mit': {
+                name: 'Massachusetts Institute of Technology',
+                image: 'images/university2.jpg',
+                overview: 'MIT is a world-renowned private research university in Cambridge, Massachusetts, known for its cutting-edge research, innovation, and excellence in science, technology, engineering, and mathematics (STEM) education.',
+                stats: {
+                    ranking: '#1',
+                    totalStudents: '11,000+',
+                    internationalStudents: '33%',
+                    programs: '200+'
+                },
+
+                campusInfo: 'MIT\'s campus features modern research facilities, innovation labs, maker spaces, and collaborative learning environments. The campus is designed to encourage interdisciplinary research and innovation.',
+                internationalInfo: 'MIT welcomes students from around the world and provides extensive support services including international student orientation, cultural programs, and dedicated advisors for visa and academic matters.'
+            }
+        };
+
+        // Load university data
+        function loadUniversityData(universityCode) {
+            const university = universityData[universityCode];
+            if (!university) return;
+
+            document.getElementById('universityImage').src = university.image;
+            document.getElementById('universityName').textContent = university.name;
+            document.getElementById('universityOverview').textContent = university.overview;
+            document.getElementById('ranking').textContent = university.stats.ranking;
+            document.getElementById('totalStudents').textContent = university.stats.totalStudents;
+            document.getElementById('internationalStudents').textContent = university.stats.internationalStudents;
+            document.getElementById('programs').textContent = university.stats.programs;
+
+            document.getElementById('campusInfo').textContent = university.campusInfo;
+            document.getElementById('internationalInfo').textContent = university.internationalInfo;
+        }
+
+        // Link functions
+        function openLink(type) {
+            console.log(`Opening ${type} link`);
+            // In a real app, this would open the appropriate link
+        }
+
+        // Add smooth scroll behavior for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add intersection observer for fade-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all fade-in elements
+            document.querySelectorAll('.fade-in').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+
+            // Load default university data (Harvard)
+            loadUniversityData('harvard');
+        });
+
+        // Add URL parameter support for different universities
+        const urlParams = new URLSearchParams(window.location.search);
+        const university = urlParams.get('university');
+        if (university && universityData[university]) {
+            loadUniversityData(university);
+        }
+    </script>
+</body>
+</html> 

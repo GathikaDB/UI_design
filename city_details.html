@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSearch - City Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.08);
+        }
+
+        /* Header with Back Button */
+        .header {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            padding: 40px 24px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-button {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-2px);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            flex: 1;
+        }
+
+        /* Top Image Section */
+        .hero-image {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70%;
+            background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        /* Introduction */
+        .introduction {
+            padding: 32px 24px 24px;
+            background: white;
+        }
+
+        .city-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1E40AF;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .city-intro {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        /* City Guide Section */
+        .city-guide {
+            padding: 0 24px 32px;
+        }
+
+        .guide-section {
+            margin-bottom: 16px;
+        }
+
+        .guide-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0F766E;
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            cursor: pointer;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .guide-title:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+        }
+
+        .guide-title-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .guide-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #0F766E 0%, #1E40AF 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .guide-arrow {
+            width: 24px;
+            height: 24px;
+            background: rgba(15, 118, 110, 0.1);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0F766E;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .guide-title.active .guide-arrow {
+            transform: rotate(180deg);
+        }
+
+        .guide-content {
+            font-size: 15px;
+            color: #64748b;
+            line-height: 1.6;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 0 0 16px 16px;
+            border-left: 4px solid #0F766E;
+            margin-top: -1px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .guide-content.active {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Data Cards Section */
+        .data-section {
+            padding: 0 24px 32px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .data-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 20px;
+            padding: 24px 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .data-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #1E40AF, #0F766E);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            z-index: 2;
+        }
+
+        .data-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .data-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .data-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            margin: 0 auto 16px;
+        }
+
+        .data-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1E40AF;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .data-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .data-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .data-card {
+                padding: 20px 16px;
+            }
+
+            .data-value {
+                font-size: 22px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <button class="back-button" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1>City Details</h1>
+            </div>
+        </div>
+
+        <!-- Hero Image -->
+        <div class="hero-image">
+            <img src="images/university1.jpg" alt="New York" id="cityImage">
+        </div>
+
+        <!-- Introduction -->
+        <div class="introduction fade-in">
+            <h2 class="city-title" id="cityTitle">New York</h2>
+            <p class="city-intro" id="cityIntro">
+                New York City, the city that never sleeps, offers an unparalleled educational experience with world-class universities, diverse cultural experiences, and endless opportunities. From the iconic skyline to the vibrant neighborhoods, NYC provides international students with a dynamic environment for academic and personal growth.
+            </p>
+        </div>
+
+        <!-- City Guide -->
+        <div class="city-guide">
+            <div class="guide-section fade-in">
+                <h3 class="guide-title" onclick="toggleSection('generalInfo')">
+                    <div class="guide-title-left">
+                        <div class="guide-icon">
+                            <i class="fas fa-info"></i>
+                        </div>
+                        General Information
+                    </div>
+                    <div class="guide-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </h3>
+                <div class="guide-content" id="generalInfo">
+                    New York City is home to prestigious institutions like Columbia University, NYU, and CUNY system. The city's educational landscape is diverse, offering programs in finance, arts, technology, and more. With excellent public transportation, world-class museums, and a thriving business ecosystem, NYC provides students with unparalleled access to internships, networking opportunities, and cultural experiences that enhance their academic journey.
+                </div>
+            </div>
+
+            <div class="guide-section fade-in">
+                <h3 class="guide-title" onclick="toggleSection('overseasLife')">
+                    <div class="guide-title-left">
+                        <div class="guide-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        Overseas Life
+                    </div>
+                    <div class="guide-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </h3>
+                <div class="guide-content" id="overseasLife">
+                    Living in NYC as an international student offers a unique blend of excitement and opportunity. The city's extensive subway system makes getting around easy and affordable. Students can explore diverse neighborhoods, enjoy world-class dining, and experience cultural events year-round. While the cost of living is high, the city offers numerous student discounts and part-time job opportunities. The international community is welcoming, and there are many support services available for international students.
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Cards -->
+        <div class="data-section">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    Key Statistics
+                </h3>
+            </div>
+            <div class="data-grid">
+                <div class="data-card fade-in">
+                    <div class="data-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="data-value" id="costOfLiving">$2,500</div>
+                    <div class="data-label">Cost of Living (Monthly)</div>
+                </div>
+                <div class="data-card fade-in">
+                    <div class="data-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="data-value" id="avgSalary">$75,000</div>
+                    <div class="data-label">Average Annual Salary</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample city data - in a real app, this would come from an API
+        const cityData = {
+            'new-york': {
+                name: 'New York',
+                image: 'images/university1.jpg',
+                intro: 'New York City, the city that never sleeps, offers an unparalleled educational experience with world-class universities, diverse cultural experiences, and endless opportunities. From the iconic skyline to the vibrant neighborhoods, NYC provides international students with a dynamic environment for academic and personal growth.',
+                generalInfo: 'New York City is home to prestigious institutions like Columbia University, NYU, and CUNY system. The city\'s educational landscape is diverse, offering programs in finance, arts, technology, and more. With excellent public transportation, world-class museums, and a thriving business ecosystem, NYC provides students with unparalleled access to internships, networking opportunities, and cultural experiences that enhance their academic journey.',
+                overseasLife: 'Living in NYC as an international student offers a unique blend of excitement and opportunity. The city\'s extensive subway system makes getting around easy and affordable. Students can explore diverse neighborhoods, enjoy world-class dining, and experience cultural events year-round. While the cost of living is high, the city offers numerous student discounts and part-time job opportunities. The international community is welcoming, and there are many support services available for international students.',
+                stats: {
+                    costOfLiving: '$2,500',
+                    avgSalary: '$75,000'
+                }
+            },
+            'boston': {
+                name: 'Boston',
+                image: 'images/university2.jpg',
+                intro: 'Boston, a historic academic hub, combines rich cultural heritage with cutting-edge innovation. Home to prestigious universities like Harvard and MIT, the city offers a unique blend of traditional academia and modern technology, making it an ideal destination for international students seeking excellence in education.',
+                generalInfo: 'Boston\'s educational landscape is dominated by world-renowned institutions including Harvard University, MIT, Boston University, and Northeastern University. The city\'s strong focus on research and innovation creates excellent opportunities for students in technology, healthcare, and business. The compact city layout makes it easy to navigate between campuses, libraries, and cultural institutions.',
+                overseasLife: 'Boston offers a high quality of life for international students with excellent public transportation, safe neighborhoods, and a strong international community. The city\'s rich history provides numerous cultural attractions, while the vibrant student population creates a welcoming atmosphere. The cost of living is high but manageable with student housing options and part-time work opportunities.',
+                stats: {
+                    costOfLiving: '$2,200',
+                    avgSalary: '$70,000'
+                }
+            },
+            'san-francisco': {
+                name: 'San Francisco',
+                image: 'images/university3.jpg',
+                intro: 'San Francisco, the tech capital of the world, offers innovative education programs and proximity to Silicon Valley\'s leading companies. The city\'s progressive culture, stunning natural beauty, and entrepreneurial spirit create an inspiring environment for international students pursuing technology and innovation.',
+                generalInfo: 'San Francisco is home to prestigious institutions like UC Berkeley, Stanford University, and San Francisco State University. The city\'s proximity to Silicon Valley provides unparalleled access to tech internships, startup opportunities, and industry connections. The educational focus on innovation and entrepreneurship prepares students for careers in technology, business, and creative industries.',
+                overseasLife: 'Living in San Francisco offers international students a unique blend of urban sophistication and natural beauty. The city\'s excellent public transportation, bike-friendly streets, and walkable neighborhoods make getting around easy. While the cost of living is high, the city offers numerous tech internships and part-time opportunities. The diverse, progressive culture creates a welcoming environment for international students.',
+                stats: {
+                    costOfLiving: '$3,000',
+                    avgSalary: '$85,000'
+                }
+            },
+            'los-angeles': {
+                name: 'Los Angeles',
+                image: 'images/university4.jpg',
+                intro: 'Los Angeles, a vibrant metropolis, offers excellent universities, entertainment industry connections, and a diverse international community. The city\'s sunny climate, cultural diversity, and creative energy make it an attractive destination for students pursuing arts, entertainment, business, and technology.',
+                generalInfo: 'Los Angeles hosts prestigious institutions like UCLA, USC, and Caltech, offering diverse academic programs across various fields. The city\'s entertainment industry provides unique opportunities for students in film, media, and performing arts. The diverse economy also supports strong programs in business, engineering, and healthcare, with excellent internship and networking opportunities.',
+                overseasLife: 'Los Angeles offers international students a dynamic lifestyle with year-round sunshine, beautiful beaches, and diverse cultural experiences. The city\'s extensive public transportation system and ride-sharing options make navigation convenient. Students can enjoy world-class entertainment, diverse dining options, and outdoor activities. The international community is large and welcoming, with numerous cultural organizations and support services.',
+                stats: {
+                    costOfLiving: '$2,800',
+                    avgSalary: '$72,000'
+                }
+            }
+        };
+
+        // Function to load city data
+        function loadCityData(cityCode) {
+            const city = cityData[cityCode];
+            if (!city) return;
+
+            document.getElementById('cityImage').src = city.image;
+            document.getElementById('cityTitle').textContent = city.name;
+            document.getElementById('cityIntro').textContent = city.intro;
+            document.getElementById('generalInfo').textContent = city.generalInfo;
+            document.getElementById('overseasLife').textContent = city.overseasLife;
+            document.getElementById('costOfLiving').textContent = city.stats.costOfLiving;
+            document.getElementById('avgSalary').textContent = city.stats.avgSalary;
+        }
+
+        // Function to toggle collapsible sections
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId);
+            const title = content.previousElementSibling;
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                title.classList.remove('active');
+            } else {
+                content.classList.add('active');
+                title.classList.add('active');
+            }
+        }
+
+        // Add smooth scroll behavior for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add intersection observer for fade-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all fade-in elements
+            document.querySelectorAll('.fade-in').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+
+            // Load default city data (New York)
+            loadCityData('new-york');
+        });
+
+        // Add URL parameter support for different cities
+        const urlParams = new URLSearchParams(window.location.search);
+        const city = urlParams.get('city');
+        if (city && cityData[city]) {
+            loadCityData(city);
+        }
+    </script>
+</body>
+</html> 

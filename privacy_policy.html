@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSearch - Privacy Policy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.08);
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            padding: 40px 24px 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-2px);
+        }
+
+        .header-title {
+            flex: 1;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        /* Content */
+        .content {
+            padding: 32px 24px 100px;
+        }
+
+        /* Introduction */
+        .intro-section {
+            margin-bottom: 40px;
+        }
+
+        .intro-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 16px;
+        }
+
+        .intro-text {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Policy Sections */
+        .policy-section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .section-content {
+            font-size: 15px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .section-content ul {
+            margin: 12px 0;
+            padding-left: 20px;
+        }
+
+        .section-content li {
+            margin-bottom: 8px;
+        }
+
+        .section-content strong {
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+
+
+
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+            }
+            
+            .header {
+                padding: 30px 20px 20px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .content {
+                padding: 24px 20px 100px;
+            }
+            
+
+            
+
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="header-content">
+                <button class="back-button" onclick="goBack()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="header-title">
+                    <h1>Privacy Policy</h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Introduction -->
+            <div class="intro-section">
+                <div class="intro-title">About This Policy</div>
+                <div class="intro-text">
+                    This Privacy Policy explains how we collect, use, and protect your personal information when you use our services. We are committed to ensuring the privacy and security of your data.
+                </div>
+            </div>
+
+            <!-- Information We Collect -->
+            <div class="policy-section">
+                <div class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    Information We Collect
+                </div>
+                <div class="section-content">
+                    <p>We collect the following types of information to provide and improve our services:</p>
+                    <ul>
+                        <li><strong>Personal Information:</strong> Name, email address, phone number, and profile information</li>
+                        <li><strong>Usage Data:</strong> How you interact with our app, pages visited, and features used</li>
+                        <li><strong>Device Information:</strong> Device type, operating system, and browser information</li>
+                        <li><strong>Location Data:</strong> General location information (with your consent)</li>
+                        <li><strong>Preferences:</strong> Your saved universities, wishlists, and search history</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- How We Use Your Information -->
+            <div class="policy-section">
+                <div class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    How We Use Your Information
+                </div>
+                <div class="section-content">
+                    <p>We use your information for the following purposes:</p>
+                    <ul>
+                        <li>Provide and maintain our university search services</li>
+                        <li>Personalize your experience and show relevant recommendations</li>
+                        <li>Improve our app functionality and user interface</li>
+                        <li>Send you important updates and notifications</li>
+                        <li>Analyze usage patterns to enhance our services</li>
+                        <li>Ensure security and prevent fraud</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Data Retention -->
+            <div class="policy-section">
+                <div class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    Data Retention
+                </div>
+                <div class="section-content">
+                    <p>We retain your personal information for as long as necessary to provide our services and fulfill the purposes outlined in this policy. Specifically:</p>
+                    <ul>
+                        <li>Account data is retained while your account is active</li>
+                        <li>Usage data is typically retained for 2 years</li>
+                        <li>You can request deletion of your data at any time</li>
+                        <li>Data may be retained longer if required by law</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Data Security -->
+            <div class="policy-section">
+                <div class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    Data Security
+                </div>
+                <div class="section-content">
+                    <p>We implement industry-standard security measures to protect your information:</p>
+                    <ul>
+                        <li>End-to-end encryption for data transmission</li>
+                        <li>Secure servers with regular security audits</li>
+                        <li>Access controls and authentication protocols</li>
+                        <li>Regular backups and disaster recovery procedures</li>
+                        <li>Employee training on data protection practices</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Third-Party Sharing -->
+            <div class="policy-section">
+                <div class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    Third-Party Sharing
+                </div>
+                <div class="section-content">
+                    <p>We do not sell your personal information. We may share data with:</p>
+                    <ul>
+                        <li><strong>Service Providers:</strong> Cloud hosting, analytics, and payment processors</li>
+                        <li><strong>Legal Requirements:</strong> When required by law or to protect rights</li>
+                        <li><strong>Business Partners:</strong> Only with your explicit consent</li>
+                        <li><strong>Aggregated Data:</strong> Anonymous statistics for research purposes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Your Rights and Choices -->
+            <div class="policy-section">
+                <div class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    Your Rights and Choices
+                </div>
+                <div class="section-content">
+                    <p>You have the following rights regarding your personal information:</p>
+                    <ul>
+                        <li><strong>Access:</strong> Request a copy of your personal data</li>
+                        <li><strong>Correction:</strong> Update or correct inaccurate information</li>
+                        <li><strong>Deletion:</strong> Request deletion of your personal data</li>
+                        <li><strong>Portability:</strong> Export your data in a machine-readable format</li>
+                        <li><strong>Opt-out:</strong> Unsubscribe from marketing communications</li>
+                        <li><strong>Consent:</strong> Withdraw consent for data processing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Updates to This Policy -->
+            <div class="policy-section">
+                <div class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    Updates to This Policy
+                </div>
+                <div class="section-content">
+                    <p>We may update this Privacy Policy from time to time. When we make changes:</p>
+                    <ul>
+                        <li>We will notify you through the app or email</li>
+                        <li>Major changes will require your consent</li>
+                        <li>The updated policy will be posted on our website</li>
+                        <li>Your continued use constitutes acceptance of changes</li>
+                    </ul>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+    <script>
+        // Back button functionality
+        function goBack() {
+            console.log('Going back to previous page');
+            // You can implement navigation logic here
+            // For now, just show an alert
+            alert('Navigating back to previous page');
+        }
+
+
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+
+    </script>
+</body>
+</html> 

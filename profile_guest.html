@@ -105,21 +105,21 @@
             animation: float 8s ease-in-out infinite;
         }
 
-        .profile-image {
+        .profile-image-placeholder {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            object-fit: cover;
             margin: 0 auto 24px;
             border: 6px solid white;
             box-shadow: 0 12px 40px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 48px;
             position: relative;
             z-index: 2;
-        }
-
-        .profile-image:hover {
-            transform: scale(1.05);
         }
 
         .profile-name {
@@ -277,14 +277,14 @@
             transform: translateX(4px);
         }
 
-        /* Logout Button */
-        .logout-section {
+        /* Login Button */
+        .login-section {
             margin-top: 40px;
         }
 
-        .logout-btn {
+        .login-btn {
             width: 100%;
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
             color: white;
             border: none;
             border-radius: 20px;
@@ -297,12 +297,12 @@
             align-items: center;
             justify-content: center;
             gap: 12px;
-            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.3);
+            box-shadow: 0 8px 30px rgba(30, 64, 175, 0.3);
             position: relative;
             overflow: hidden;
         }
 
-        .logout-btn::before {
+        .login-btn::before {
             content: '';
             position: absolute;
             top: 0;
@@ -313,16 +313,16 @@
             transition: left 0.5s ease;
         }
 
-        .logout-btn:hover::before {
+        .login-btn:hover::before {
             left: 100%;
         }
 
-        .logout-btn:hover {
+        .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4);
+            box-shadow: 0 8px 30px rgba(30, 64, 175, 0.4);
         }
 
-        .logout-btn:active {
+        .login-btn:active {
             transform: translateY(0);
         }
 
@@ -392,9 +392,10 @@
                 padding: 24px 20px;
             }
             
-            .profile-image {
+            .profile-image-placeholder {
                 width: 80px;
                 height: 80px;
+                font-size: 32px;
             }
             
             .profile-name {
@@ -451,21 +452,23 @@
         <!-- Profile Section -->
         <div class="profile-section">
             <div class="profile-card">
-                <img src="images/university1.jpg" alt="User Profile" class="profile-image">
-                <div class="profile-name">Sarah Johnson</div>
-                <div class="profile-email">sarah.johnson@email.com</div>
+                <div class="profile-image-placeholder">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="profile-name">Guest User</div>
+                <div class="profile-email">Sign in to access your profile</div>
                 
                 <div class="profile-stats">
                     <div class="stat-item">
-                        <span class="stat-number">12</span>
+                        <span class="stat-number">0</span>
                         <span class="stat-label">Favorites</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">8</span>
+                        <span class="stat-number">0</span>
                         <span class="stat-label">Wishlist</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">24</span>
+                        <span class="stat-number">0</span>
                         <span class="stat-label">Viewed</span>
                     </div>
                 </div>
@@ -598,11 +601,11 @@
                 </div>
             </div>
 
-            <!-- Logout Section -->
-            <div class="logout-section">
-                <button class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Log Out
+            <!-- Login Section -->
+            <div class="login-section">
+                <button class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In
                 </button>
             </div>
         </div>
@@ -621,7 +624,7 @@
                 <i class="fas fa-compass nav-icon"></i>
                 <span class="nav-label">Explore</span>
             </a>
-            <a href="profile_page.html" class="nav-item active">
+            <a href="profile_guest.html" class="nav-item active">
                 <i class="fas fa-user nav-icon"></i>
                 <span class="nav-label">Profile</span>
             </a>
@@ -643,27 +646,25 @@
             });
         });
 
-        // Profile image click
-        document.querySelector('.profile-image').addEventListener('click', function() {
+        // Profile image placeholder click
+        document.querySelector('.profile-image-placeholder').addEventListener('click', function() {
             this.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 this.style.transform = '';
             }, 150);
-            // Add profile image edit logic here
+            // Add sign in logic here
         });
 
-        // Logout functionality
-        document.querySelector('.logout-btn').addEventListener('click', function() {
+        // Login functionality
+        document.querySelector('.login-btn').addEventListener('click', function() {
             this.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 this.style.transform = '';
             }, 150);
             
-            // Add logout confirmation
-            if (confirm('Are you sure you want to log out?')) {
-                console.log('User logged out');
-                // Add logout logic here
-            }
+            // Add login navigation logic here
+            console.log('User wants to sign in');
+            // Navigate to login page or show login modal
         });
 
         // Navigation active state

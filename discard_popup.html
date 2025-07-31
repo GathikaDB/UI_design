@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discard Changes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .popup {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .popup-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin: 0 auto 20px;
+        }
+
+        .popup-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+
+        .popup-text {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            min-width: 100px;
+        }
+
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-cancel:hover {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-discard {
+            background: linear-gradient(135deg, #0F766E 0%, #1E40AF 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(15, 118, 110, 0.3);
+        }
+
+        .btn-discard:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(15, 118, 110, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="popup">
+        <div class="popup-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="popup-title">Discard Changes?</div>
+        <div class="popup-text">You have unsaved changes. Are you sure you want to discard them?</div>
+        <div class="popup-buttons">
+            <button class="btn btn-cancel" onclick="cancel()">Cancel</button>
+            <button class="btn btn-discard" onclick="discard()">Discard</button>
+        </div>
+    </div>
+
+    <script>
+        function cancel() {
+            console.log('Cancel clicked - stay on current page');
+            // Close popup and stay on current page
+            // You can implement popup closing logic here
+            alert('Staying on current page');
+        }
+
+        function discard() {
+            console.log('Discard clicked - navigate away');
+            // Navigate away and discard changes
+            // You can implement navigation logic here
+            alert('Navigating away - changes discarded');
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSearch - Edit Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.08);
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            padding: 60px 24px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
+            font-weight: 400;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 40px;
+            left: 24px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 3;
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+
+        /* Profile Form Section */
+        .profile-section {
+            margin: -20px 24px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #1e293b;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #1E40AF;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        .name-input-group {
+            position: relative;
+        }
+
+        .name-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #1E40AF;
+            font-size: 18px;
+            z-index: 2;
+        }
+
+        .name-input-group .form-input {
+            padding-left: 50px;
+        }
+
+        .email-input-group {
+            position: relative;
+        }
+
+        .email-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #1E40AF;
+            font-size: 18px;
+            z-index: 2;
+        }
+
+        .email-input-group .form-input {
+            padding-left: 50px;
+        }
+
+        /* Avatar Upload */
+        .avatar-upload-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border: 2px dashed #e2e8f0;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar-preview:hover {
+            border-color: #1E40AF;
+            background: #f1f5f9;
+        }
+
+        .avatar-preview.has-image {
+            border-style: solid;
+            border-color: #1E40AF;
+        }
+
+        .avatar-placeholder {
+            font-size: 24px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+
+        .avatar-text {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .avatar-upload-btn {
+            flex: 1;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .avatar-upload-btn:hover {
+            border-color: #1E40AF;
+            background: #f8fafc;
+            transform: translateY(-1px);
+        }
+
+        .avatar-upload-btn i {
+            color: #1E40AF;
+            font-size: 16px;
+        }
+
+        .save-button {
+            width: 100%;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 18px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .save-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.3);
+        }
+
+        .save-button:hover::before {
+            left: 100%;
+        }
+
+        .save-button:active {
+            transform: translateY(0);
+        }
+
+        .save-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading State */
+        .loading {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error Message */
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #16a34a;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+            }
+            
+            .header {
+                padding: 50px 20px 30px;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .profile-section {
+                margin: -15px 20px 0;
+            }
+            
+            .profile-card {
+                padding: 32px 24px;
+            }
+            
+            .avatar-upload-group {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+            
+            .avatar-preview {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .avatar-upload-btn {
+                width: 100%;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <div class="header">
+            <button class="back-button" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="header-content">
+                <h1>Edit Profile</h1>
+                <p>Update your personal information</p>
+            </div>
+        </div>
+
+        <!-- Profile Form Section -->
+        <div class="profile-section">
+            <div class="profile-card">
+                <!-- Error Message -->
+                <div class="error-message" id="errorMessage">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText"></span>
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-message" id="successMessage">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="successText"></span>
+                </div>
+
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Full Name</label>
+                        <div class="name-input-group">
+                            <i class="fas fa-user name-icon"></i>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                class="form-input" 
+                                placeholder="Enter your full name"
+                                required
+                                autocomplete="name"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <div class="email-input-group">
+                            <i class="fas fa-envelope email-icon"></i>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                class="form-input" 
+                                placeholder="Enter your email address"
+                                required
+                                autocomplete="email"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="avatar" class="form-label">Profile Picture (Optional)</label>
+                        <div class="avatar-upload-group">
+                            <div class="avatar-preview" id="avatarPreview">
+                                <i class="fas fa-user avatar-placeholder"></i>
+                                <span class="avatar-text">Add Photo</span>
+                            </div>
+                            <input 
+                                type="file" 
+                                id="avatar" 
+                                class="avatar-input" 
+                                accept="image/*"
+                                style="display: none;"
+                            >
+                            <button type="button" class="avatar-upload-btn" onclick="document.getElementById('avatar').click()">
+                                <i class="fas fa-camera"></i>
+                                Choose Photo
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="save-button" id="saveButton">
+                        <span class="button-text">Save Changes</span>
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <span>Saving...</span>
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const profileForm = document.getElementById('profileForm');
+        const saveButton = document.getElementById('saveButton');
+        const buttonText = saveButton.querySelector('.button-text');
+        const loading = saveButton.querySelector('.loading');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const errorText = document.getElementById('errorText');
+        const successText = document.getElementById('successText');
+
+        // Hide messages initially
+        errorMessage.style.display = 'none';
+        successMessage.style.display = 'none';
+
+        // Load existing profile data (simulate from localStorage or API)
+        function loadProfileData() {
+            // Simulate loading existing data
+            const existingData = {
+                name: 'John Doe',
+                email: 'john.doe@example.com',
+                avatar: null // or existing avatar URL
+            };
+
+            document.getElementById('name').value = existingData.name;
+            document.getElementById('email').value = existingData.email;
+
+            // If there's an existing avatar, show it
+            if (existingData.avatar) {
+                const avatarPreview = document.getElementById('avatarPreview');
+                avatarPreview.innerHTML = `<img src="${existingData.avatar}" alt="Profile Picture">`;
+                avatarPreview.classList.add('has-image');
+            }
+        }
+
+        // Avatar upload handling
+        const avatarInput = document.getElementById('avatar');
+        const avatarPreview = document.getElementById('avatarPreview');
+
+        avatarInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    showError('Please select a valid image file');
+                    return;
+                }
+
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showError('Image size should be less than 5MB');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Clear existing content
+                    avatarPreview.innerHTML = '';
+                    
+                    // Create and add image
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'Profile Picture';
+                    avatarPreview.appendChild(img);
+                    
+                    // Add has-image class for styling
+                    avatarPreview.classList.add('has-image');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Click on avatar preview to trigger file input
+        avatarPreview.addEventListener('click', function() {
+            avatarInput.click();
+        });
+
+        profileForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const avatarFile = document.getElementById('avatar').files[0];
+            
+            // Basic validation
+            if (!name) {
+                showError('Please enter your full name');
+                return;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Please enter a valid email address');
+                return;
+            }
+
+            // Show loading state
+            setLoadingState(true);
+            hideMessages();
+
+            try {
+                // Simulate API call with form data
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('email', email);
+                if (avatarFile) {
+                    formData.append('avatar', avatarFile);
+                }
+                
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Simulate success
+                showSuccess('Profile updated successfully!');
+                
+                // Redirect back to profile page after a short delay
+                setTimeout(() => {
+                    window.location.href = 'profile_page.html';
+                }, 1500);
+                
+            } catch (error) {
+                showError('Something went wrong. Please try again.');
+            } finally {
+                setLoadingState(false);
+            }
+        });
+
+        function setLoadingState(isLoading) {
+            if (isLoading) {
+                buttonText.style.display = 'none';
+                loading.style.display = 'flex';
+                saveButton.disabled = true;
+            } else {
+                buttonText.style.display = 'block';
+                loading.style.display = 'none';
+                saveButton.disabled = false;
+            }
+        }
+
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.style.display = 'flex';
+            errorMessage.style.alignItems = 'center';
+            errorMessage.style.gap = '8px';
+        }
+
+        function showSuccess(message) {
+            successText.textContent = message;
+            successMessage.style.display = 'flex';
+            successMessage.style.alignItems = 'center';
+            successMessage.style.gap = '8px';
+        }
+
+        function hideMessages() {
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        // Form input validation
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        
+        nameInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                hideMessages();
+            }
+        });
+        
+        emailInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                hideMessages();
+            }
+        });
+
+        // Smooth interactions
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Load profile data when page loads
+        window.addEventListener('load', function() {
+            loadProfileData();
+        });
+    </script>
+</body>
+</html> 

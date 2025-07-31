@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSearch - Information & Insights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.08);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            padding: 40px 24px 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
+            font-weight: 400;
+        }
+
+        /* Content */
+        .content {
+            padding: 32px 24px 100px;
+        }
+
+        /* Introduction Section */
+        .introduction {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 12px;
+        }
+
+        .section-description {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Search Bar */
+        .search-section {
+            margin-bottom: 32px;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            border: none;
+            border-radius: 16px;
+            background: rgba(15, 118, 110, 0.1);
+            font-size: 16px;
+            color: #1e293b;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            background: rgba(15, 118, 110, 0.15);
+            box-shadow: 0 4px 20px rgba(15, 118, 110, 0.2);
+        }
+
+        .search-bar::placeholder {
+            color: #64748b;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #0F766E;
+            font-size: 18px;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            margin-bottom: 32px;
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 4px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .filter-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-button {
+            padding: 10px 20px;
+            background: rgba(15, 118, 110, 0.1);
+            border: none;
+            border-radius: 20px;
+            color: #0F766E;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .filter-button.active,
+        .filter-button:hover {
+            background: #0F766E;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Featured Insights */
+        .featured-section {
+            margin-bottom: 40px;
+        }
+
+        .featured-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .featured-item {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .featured-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #1E40AF, #0F766E);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+            z-index: 2;
+        }
+
+        .featured-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .featured-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .featured-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .featured-item:hover .featured-image {
+            transform: scale(1.02);
+        }
+
+        .featured-content {
+            padding: 20px;
+        }
+
+        .featured-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .featured-description {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .read-more {
+            color: #0F766E;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .read-more:hover {
+            color: #1E40AF;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .filter-container {
+                gap: 8px;
+            }
+
+            .filter-button {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Search results */
+        .search-results {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .result-item {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid #0F766E;
+        }
+
+        .result-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 4px;
+        }
+
+        .result-category {
+            font-size: 12px;
+            color: #0F766E;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1>Information & Insights</h1>
+                <p>Discover valuable insights about studying abroad</p>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Introduction -->
+            <div class="introduction fade-in">
+                <h2 class="section-title">Welcome to Insights</h2>
+                <p class="section-description">
+                    Discover valuable information about studying abroad, university rankings, and scholarship opportunities to help you make informed decisions.
+                </p>
+            </div>
+
+            <!-- Search Section -->
+            <div class="search-section fade-in">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-bar" placeholder="Search for insights, topics, or articles..." id="searchInput">
+                </div>
+                <div class="search-results" id="searchResults">
+                    <!-- Search results will be populated here -->
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-section fade-in">
+                <div class="filter-container">
+                    <button class="filter-button active" onclick="filterContent('all')">All</button>
+                    <button class="filter-button" onclick="filterContent('trends')">Trends</button>
+                    <button class="filter-button" onclick="filterContent('rankings')">Rankings</button>
+                    <button class="filter-button" onclick="filterContent('scholarships')">Scholarships</button>
+                    <button class="filter-button" onclick="filterContent('guides')">Guides</button>
+                    <button class="filter-button" onclick="filterContent('news')">News</button>
+                </div>
+            </div>
+
+            <!-- Featured Insights -->
+            <div class="featured-section">
+                <h3 class="section-title fade-in">Featured Insights</h3>
+                <div class="featured-list">
+                    <div class="featured-item fade-in" onclick="showArticle('top-universities-2024')">
+                        <img src="images/university1.jpg" alt="Top Universities 2024" class="featured-image">
+                        <div class="featured-content">
+                            <h4 class="featured-title">Top Universities Worldwide 2024</h4>
+                            <p class="featured-description">Latest rankings of world's leading universities.</p>
+                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="featured-item fade-in" onclick="showArticle('scholarship-tips')">
+                        <img src="images/university2.jpg" alt="Scholarship Tips" class="featured-image">
+                        <div class="featured-content">
+                            <h4 class="featured-title">How to Secure International Scholarships</h4>
+                            <p class="featured-description">Essential tips for applying to scholarships.</p>
+                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="featured-item fade-in" onclick="showArticle('study-abroad-guide')">
+                        <img src="images/university3.jpg" alt="Study Abroad Guide" class="featured-image">
+                        <div class="featured-content">
+                            <h4 class="featured-title">Complete Study Abroad Guide</h4>
+                            <p class="featured-description">Everything you need to know about studying abroad.</p>
+                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="featured-item fade-in" onclick="showArticle('visa-process')">
+                        <img src="images/university4.jpg" alt="Visa Process" class="featured-image">
+                        <div class="featured-content">
+                            <h4 class="featured-title">Student Visa Application Process</h4>
+                            <p class="featured-description">Step-by-step guide to getting your student visa.</p>
+                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for search and filtering
+        const insightsData = {
+            trends: [
+                { title: "Study Abroad Trends 2024", category: "trends" },
+                { title: "Popular Study Destinations", category: "trends" }
+            ],
+            rankings: [
+                { title: "Top Universities Worldwide 2024", category: "rankings" },
+                { title: "Best Universities by Subject", category: "rankings" }
+            ],
+            scholarships: [
+                { title: "How to Secure International Scholarships", category: "scholarships" },
+                { title: "Top Scholarship Programs", category: "scholarships" }
+            ],
+            guides: [
+                { title: "Complete Study Abroad Guide", category: "guides" },
+                { title: "Visa Application Process", category: "guides" }
+            ],
+            news: [
+                { title: "Latest Education News", category: "news" },
+                { title: "University Updates", category: "news" }
+            ]
+        };
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (searchTerm.length < 2) {
+                resultsContainer.classList.remove('active');
+                return;
+            }
+
+            const results = [];
+            Object.values(insightsData).flat().forEach(item => {
+                if (item.title.toLowerCase().includes(searchTerm)) {
+                    results.push(item);
+                }
+            });
+
+            displaySearchResults(results);
+        });
+
+        function displaySearchResults(results) {
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div class="result-item"><div class="result-title">No results found</div></div>';
+            } else {
+                resultsContainer.innerHTML = results.map(item => `
+                    <div class="result-item" onclick="showArticle('${item.title.toLowerCase().replace(/\s+/g, '-')}')">
+                        <div class="result-title">${item.title}</div>
+                        <div class="result-category">${item.category}</div>
+                    </div>
+                `).join('');
+            }
+            
+            resultsContainer.classList.add('active');
+        }
+
+        // Filter functionality
+        function filterContent(category) {
+            // Update active filter button
+            document.querySelectorAll('.filter-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // In a real app, this would filter the content
+            console.log(`Filtering by: ${category}`);
+        }
+
+        // Article function
+        function showArticle(articleId) {
+            console.log(`Showing article: ${articleId}`);
+            // In a real app, this would navigate to article page
+        }
+
+        // Add smooth scroll behavior for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add intersection observer for fade-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all fade-in elements
+            document.querySelectorAll('.fade-in').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html> 

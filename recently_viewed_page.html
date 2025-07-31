@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSearch - Recently Viewed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.08);
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            padding: 40px 24px 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
+            font-weight: 400;
+        }
+
+        /* Search Bar */
+        .search-section {
+            margin: -20px 24px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        .search-input {
+            width: 100%;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 16px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: #1e293b;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #64748b;
+        }
+
+        /* Content */
+        .content {
+            padding: 32px 24px 100px;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Clear History Button */
+        .clear-history-section {
+            margin-bottom: 24px;
+        }
+
+        .clear-history-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .clear-history-btn:hover {
+            background: #ef4444;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* Recently Viewed Grid */
+        .recently-viewed-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .recently-viewed-item {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .recently-viewed-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+
+        .recently-viewed-image {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+
+        .recently-viewed-content {
+            padding: 16px;
+        }
+
+        .recently-viewed-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .recently-viewed-description {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .recently-viewed-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .view-time {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .remove-item:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.1) 0%, rgba(15, 118, 110, 0.1) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1E40AF;
+            font-size: 32px;
+            margin: 0 auto 24px;
+        }
+
+        .empty-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+
+        .empty-description {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 32px;
+        }
+
+        .browse-button {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+            }
+            
+            .header {
+                padding: 30px 20px 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .search-section {
+                margin: -15px 20px 0;
+            }
+            
+            .search-card {
+                padding: 20px;
+            }
+            
+            .content {
+                padding: 24px 20px 100px;
+            }
+            
+            .recently-viewed-content {
+                padding: 14px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="header-content">
+                <h1>Recently Viewed</h1>
+                <p>Your browsing history</p>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-card">
+                <input type="text" class="search-input" placeholder="Search your recent items" id="searchInput" oninput="filterRecentlyViewed()">
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Clear History Section -->
+            <div class="clear-history-section" id="clearHistorySection">
+                <button class="clear-history-btn" onclick="clearHistory()">
+                    <i class="fas fa-trash"></i>
+                    Clear All History
+                </button>
+            </div>
+
+            <!-- Recently Viewed Section -->
+            <div class="section" id="recentlyViewedSection">
+                <div class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    Recently Viewed
+                </div>
+                
+                <div class="recently-viewed-grid" id="recentlyViewedGrid">
+                    <div class="recently-viewed-item" data-name="Harvard University">
+                        <img src="images/university1.jpg" alt="Harvard University" class="recently-viewed-image">
+                        <div class="recently-viewed-content">
+                            <div class="recently-viewed-title">Harvard University</div>
+                            <div class="recently-viewed-description">A world-renowned Ivy League university in Cambridge, MA</div>
+                            <div class="recently-viewed-meta">
+                                <div class="view-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>2 hours ago</span>
+                                </div>
+                                <button class="remove-item" onclick="removeItem(this)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recently-viewed-item" data-name="Stanford University">
+                        <img src="images/university2.jpg" alt="Stanford University" class="recently-viewed-image">
+                        <div class="recently-viewed-content">
+                            <div class="recently-viewed-title">Stanford University</div>
+                            <div class="recently-viewed-description">Leading research university in Silicon Valley</div>
+                            <div class="recently-viewed-meta">
+                                <div class="view-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>1 day ago</span>
+                                </div>
+                                <button class="remove-item" onclick="removeItem(this)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recently-viewed-item" data-name="University of Oxford">
+                        <img src="images/university3.jpg" alt="University of Oxford" class="recently-viewed-image">
+                        <div class="recently-viewed-content">
+                            <div class="recently-viewed-title">University of Oxford</div>
+                            <div class="recently-viewed-description">Historic and prestigious university in England</div>
+                            <div class="recently-viewed-meta">
+                                <div class="view-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>2 days ago</span>
+                                </div>
+                                <button class="remove-item" onclick="removeItem(this)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recently-viewed-item" data-name="MIT">
+                        <img src="images/university4.jpg" alt="MIT" class="recently-viewed-image">
+                        <div class="recently-viewed-content">
+                            <div class="recently-viewed-title">Massachusetts Institute of Technology</div>
+                            <div class="recently-viewed-description">World leader in science and technology education</div>
+                            <div class="recently-viewed-meta">
+                                <div class="view-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>3 days ago</span>
+                                </div>
+                                <button class="remove-item" onclick="removeItem(this)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recently-viewed-item" data-name="University of Cambridge">
+                        <img src="images/university1.jpg" alt="University of Cambridge" class="recently-viewed-image">
+                        <div class="recently-viewed-content">
+                            <div class="recently-viewed-title">University of Cambridge</div>
+                            <div class="recently-viewed-description">One of the world's oldest and most prestigious universities</div>
+                            <div class="recently-viewed-meta">
+                                <div class="view-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>1 week ago</span>
+                                </div>
+                                <button class="remove-item" onclick="removeItem(this)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recently-viewed-item" data-name="Yale University">
+                        <img src="images/university2.jpg" alt="Yale University" class="recently-viewed-image">
+                        <div class="recently-viewed-content">
+                            <div class="recently-viewed-title">Yale University</div>
+                            <div class="recently-viewed-description">Ivy League institution with rich academic history</div>
+                            <div class="recently-viewed-meta">
+                                <div class="view-time">
+                                    <i class="fas fa-clock"></i>
+                                    <span>1 week ago</span>
+                                </div>
+                                <button class="remove-item" onclick="removeItem(this)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <div class="empty-title">You haven't viewed anything recently</div>
+                <div class="empty-description">Start exploring universities to see them here</div>
+                <button class="browse-button" onclick="browseItems()">
+                    <i class="fas fa-compass"></i>
+                    Browse Items
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Remove individual item functionality
+        function removeItem(btn) {
+            const item = btn.closest('.recently-viewed-item');
+            item.style.opacity = '0';
+            item.style.transform = 'translateX(100px)';
+            setTimeout(() => {
+                item.remove();
+                checkEmptyState();
+            }, 300);
+        }
+
+        // Clear all history functionality
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear all recently viewed items?')) {
+                const grid = document.getElementById('recentlyViewedGrid');
+                const items = grid.querySelectorAll('.recently-viewed-item');
+                
+                items.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.opacity = '0';
+                        item.style.transform = 'translateX(100px)';
+                        setTimeout(() => {
+                            item.remove();
+                            if (index === items.length - 1) {
+                                checkEmptyState();
+                            }
+                        }, 300);
+                    }, index * 100);
+                });
+            }
+        }
+
+        // Check if list is empty and show empty state
+        function checkEmptyState() {
+            const grid = document.getElementById('recentlyViewedGrid');
+            const empty = document.getElementById('emptyState');
+            const section = document.getElementById('recentlyViewedSection');
+            const clearSection = document.getElementById('clearHistorySection');
+            
+            if (grid.children.length === 0) {
+                section.style.display = 'none';
+                clearSection.style.display = 'none';
+                empty.style.display = 'block';
+            } else {
+                section.style.display = 'block';
+                clearSection.style.display = 'block';
+                empty.style.display = 'none';
+            }
+        }
+
+        // Browse items functionality
+        function browseItems() {
+            window.location.href = 'explore_page.html';
+        }
+
+        // Filter recently viewed functionality
+        function filterRecentlyViewed() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const items = document.querySelectorAll('.recently-viewed-item');
+            let visibleCount = 0;
+            
+            items.forEach(item => {
+                const name = item.getAttribute('data-name').toLowerCase();
+                if (name.includes(input)) {
+                    item.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Show empty state if no items match search
+            if (visibleCount === 0 && input !== '') {
+                document.getElementById('recentlyViewedSection').style.display = 'none';
+                document.getElementById('clearHistorySection').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+                document.querySelector('.empty-title').textContent = 'No matches found';
+                document.querySelector('.empty-description').textContent = 'Try adjusting your search terms';
+            } else if (input === '') {
+                document.getElementById('recentlyViewedSection').style.display = 'block';
+                document.getElementById('clearHistorySection').style.display = 'block';
+                document.getElementById('emptyState').style.display = 'none';
+                document.querySelector('.empty-title').textContent = 'You haven\'t viewed anything recently';
+                document.querySelector('.empty-description').textContent = 'Start exploring universities to see them here';
+            }
+        }
+
+        // Add loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html> 

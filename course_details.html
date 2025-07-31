@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSearch - Course Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.08);
+        }
+
+        /* Header with Back Button */
+        .header {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            padding: 40px 24px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-button {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-2px);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            flex: 1;
+        }
+
+        /* Course Hero Image */
+        .course-hero {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .course-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .course-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        /* Course Info */
+        .course-info {
+            padding: 32px 24px 24px;
+            background: white;
+        }
+
+        .course-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1E40AF;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .course-overview {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        /* Key Stats */
+        .key-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid rgba(255,255,255,0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #0F766E 0%, #1E40AF 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            margin: 0 auto 12px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1E40AF;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Course Details Sections */
+        .course-details {
+            padding: 0 24px 32px;
+        }
+
+        .detail-section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #0F766E 0%, #1E40AF 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .section-content {
+            font-size: 15px;
+            color: #64748b;
+            line-height: 1.6;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 16px;
+        }
+
+        .requirements-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .requirements-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.1);
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .requirements-list li:before {
+            content: '•';
+            color: #0F766E;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .requirements-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Instructor Section */
+        .instructor-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .instructor-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .instructor-info h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 4px;
+        }
+
+        .instructor-info p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        /* Enroll Button */
+        .enroll-section {
+            padding: 0 24px 32px;
+            text-align: center;
+        }
+
+        .enroll-button {
+            background: linear-gradient(135deg, #0F766E 0%, #1E40AF 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 18px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 32px rgba(15, 118, 110, 0.3);
+            width: 100%;
+            justify-content: center;
+        }
+
+        .enroll-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(15, 118, 110, 0.4);
+        }
+
+        /* Related Courses */
+        .related-courses {
+            padding: 0 24px 32px;
+        }
+
+        .courses-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 8px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .courses-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .course-card {
+            min-width: 200px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 20px;
+            padding: 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .course-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .course-card-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .course-card:hover .course-card-image {
+            transform: scale(1.02);
+        }
+
+        .course-card-content {
+            padding: 16px;
+        }
+
+        .course-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .course-card-category {
+            font-size: 12px;
+            color: #0F766E;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .key-stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .course-card {
+                min-width: 180px;
+            }
+
+            .enroll-button {
+                padding: 16px 24px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <button class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1>Course Details</h1>
+            </div>
+        </div>
+
+        <!-- Course Hero Image -->
+        <div class="course-hero">
+            <img src="images/university1.jpg" alt="Course Image">
+        </div>
+
+        <!-- Course Info -->
+        <div class="course-info fade-in">
+            <h2 class="course-title">Advanced Web Development</h2>
+            <p class="course-overview">
+                Master modern web development techniques including React, Node.js, and cloud deployment. Learn to build scalable, responsive web applications with industry best practices.
+            </p>
+        </div>
+
+        <!-- Key Stats -->
+        <div class="course-info">
+            <div class="key-stats">
+                <div class="stat-item fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-value">$1,299</div>
+                    <div class="stat-label">Course Fee</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value">2,450</div>
+                    <div class="stat-label">Enrolled Students</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-value">4.8</div>
+                    <div class="stat-label">Rating</div>
+                </div>
+                <div class="stat-item fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value">15</div>
+                    <div class="stat-label">Available Slots</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Details -->
+        <div class="course-details">
+            <!-- Course Description -->
+            <div class="detail-section fade-in">
+                <h3 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    Course Description
+                </h3>
+                <div class="section-content">
+                    This comprehensive course covers everything you need to become a proficient web developer. You'll learn modern JavaScript frameworks, backend development, database design, and deployment strategies. The course includes hands-on projects, real-world case studies, and mentorship from industry experts.
+                </div>
+            </div>
+
+            <!-- Course Requirements -->
+            <div class="detail-section fade-in">
+                <h3 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-list-check"></i>
+                    </div>
+                    Course Requirements
+                </h3>
+                <div class="section-content">
+                    <ul class="requirements-list">
+                        <li>Basic knowledge of HTML, CSS, and JavaScript</li>
+                        <li>Familiarity with programming concepts</li>
+                        <li>Access to a computer with internet connection</li>
+                        <li>Willingness to learn and practice regularly</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Duration & Schedule -->
+            <div class="detail-section fade-in">
+                <h3 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    Duration & Schedule
+                </h3>
+                <div class="section-content">
+                    <strong>Duration:</strong> 12 weeks<br>
+                    <strong>Schedule:</strong> 3 sessions per week (2 hours each)<br>
+                    <strong>Format:</strong> Live online classes with recorded sessions<br>
+                    <strong>Start Date:</strong> Next cohort begins January 15, 2024
+                </div>
+            </div>
+
+            <!-- Instructor Information -->
+            <div class="detail-section fade-in">
+                <h3 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    Instructor
+                </h3>
+                <div class="instructor-card">
+                    <div class="instructor-avatar">
+                        JD
+                    </div>
+                    <div class="instructor-info">
+                        <h4>Dr. John Davis</h4>
+                        <p>Senior Software Engineer at Google with 8+ years of experience in web development. Previously worked at Facebook and Microsoft.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Certification -->
+            <div class="detail-section fade-in">
+                <h3 class="section-title">
+                    <div class="section-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    Certification
+                </h3>
+                <div class="section-content">
+                    Upon successful completion of this course, you will receive a professional certificate recognized by leading tech companies. The certificate includes your final project portfolio and can be shared on LinkedIn and other professional platforms.
+                </div>
+            </div>
+        </div>
+
+        <!-- Enroll Button -->
+        <div class="enroll-section fade-in">
+            <button class="enroll-button">
+                <i class="fas fa-graduation-cap"></i>
+                Enroll Now
+            </button>
+        </div>
+
+        <!-- Related Courses -->
+        <div class="related-courses">
+            <h3 class="section-title fade-in">
+                <div class="section-icon">
+                    <i class="fas fa-link"></i>
+                </div>
+                Related Courses
+            </h3>
+            <div class="courses-scroll">
+                <div class="course-card fade-in">
+                    <img src="images/university2.jpg" alt="Mobile Development" class="course-card-image">
+                    <div class="course-card-content">
+                        <h4 class="course-card-title">Mobile App Development</h4>
+                        <p class="course-card-category">iOS & Android</p>
+                    </div>
+                </div>
+                <div class="course-card fade-in">
+                    <img src="images/university3.jpg" alt="Data Science" class="course-card-image">
+                    <div class="course-card-content">
+                        <h4 class="course-card-title">Data Science Fundamentals</h4>
+                        <p class="course-card-category">Analytics</p>
+                    </div>
+                </div>
+                <div class="course-card fade-in">
+                    <img src="images/university4.jpg" alt="Cybersecurity" class="course-card-image">
+                    <div class="course-card-content">
+                        <h4 class="course-card-title">Cybersecurity Essentials</h4>
+                        <p class="course-card-category">Security</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

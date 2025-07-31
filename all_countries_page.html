@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSearch - All Countries</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.08);
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            padding: 40px 24px 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
+            font-weight: 400;
+        }
+
+        /* Search Section */
+        .search-section {
+            margin: -20px 24px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        .search-input {
+            width: 100%;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 16px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: #1e293b;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #64748b;
+        }
+
+        /* A-Z Scroll Bar */
+        .az-scrollbar {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 8px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .az-letter {
+            width: 24px;
+            height: 24px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            color: #1E40AF;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .az-letter:hover {
+            background: #0F766E;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Content */
+        .content {
+            padding: 24px 24px 100px;
+            position: relative;
+        }
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-header {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1E40AF;
+            margin-bottom: 20px;
+            padding: 16px 0;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 80px;
+            background: #ffffff;
+            z-index: 4;
+        }
+
+        /* Country Grid */
+        .country-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .country-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .country-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+
+        .country-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .country-content {
+            padding: 20px;
+        }
+
+        .country-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1E40AF;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .country-info {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .footer {
+            background: #f8fafc;
+            padding: 24px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #0F766E;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+            }
+            
+            .header {
+                padding: 30px 20px 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .search-section {
+                margin: -15px 20px 0;
+            }
+            
+            .search-card {
+                padding: 20px;
+            }
+            
+            .content {
+                padding: 20px 20px 100px;
+            }
+            
+            .country-content {
+                padding: 16px;
+            }
+            
+            .az-scrollbar {
+                right: 10px;
+                padding: 8px 6px;
+            }
+            
+            .az-letter {
+                width: 20px;
+                height: 20px;
+                font-size: 10px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Loading animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="header-content">
+                <h1>All Countries</h1>
+                <p>Explore universities and programs worldwide</p>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-card">
+                <input type="text" class="search-input" placeholder="Search for a country...">
+            </div>
+        </div>
+
+        <!-- A-Z Scroll Bar -->
+        <div class="az-scrollbar">
+            <a href="#section-A" class="az-letter">A</a>
+            <a href="#section-B" class="az-letter">B</a>
+            <a href="#section-C" class="az-letter">C</a>
+            <a href="#section-D" class="az-letter">D</a>
+            <a href="#section-E" class="az-letter">E</a>
+            <a href="#section-F" class="az-letter">F</a>
+            <a href="#section-G" class="az-letter">G</a>
+            <a href="#section-H" class="az-letter">H</a>
+            <a href="#section-I" class="az-letter">I</a>
+            <a href="#section-J" class="az-letter">J</a>
+            <a href="#section-K" class="az-letter">K</a>
+            <a href="#section-L" class="az-letter">L</a>
+            <a href="#section-M" class="az-letter">M</a>
+            <a href="#section-N" class="az-letter">N</a>
+            <a href="#section-O" class="az-letter">O</a>
+            <a href="#section-P" class="az-letter">P</a>
+            <a href="#section-Q" class="az-letter">Q</a>
+            <a href="#section-R" class="az-letter">R</a>
+            <a href="#section-S" class="az-letter">S</a>
+            <a href="#section-T" class="az-letter">T</a>
+            <a href="#section-U" class="az-letter">U</a>
+            <a href="#section-V" class="az-letter">V</a>
+            <a href="#section-W" class="az-letter">W</a>
+            <a href="#section-Y" class="az-letter">Y</a>
+            <a href="#section-Z" class="az-letter">Z</a>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Countries A -->
+            <div class="section" id="section-A">
+                <h2 class="section-header">A</h2>
+                <div class="country-grid">
+                    <a href="country_details.html?country=afghanistan" class="country-card fade-in">
+                        <img src="images/afghanistan.jpg" alt="Afghanistan" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Afghanistan</div>
+                            <div class="country-info">Capital: Kabul • Population: 38.9M • Major universities and educational institutions</div>
+                        </div>
+                    </a>
+                    <a href="country_details.html?country=australia" class="country-card fade-in">
+                        <img src="images/austrailia.jpg" alt="Australia" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Australia</div>
+                            <div class="country-info">Capital: Canberra • Population: 25.7M • World-class universities and research institutions</div>
+                        </div>
+                    </a>
+                    <a href="country_details.html?country=argentina" class="country-card fade-in">
+                        <img src="images/argentina.jpg" alt="Argentina" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Argentina</div>
+                            <div class="country-info">Capital: Buenos Aires • Population: 45.4M • Leading universities in Latin America</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Countries C -->
+            <div class="section" id="section-C">
+                <h2 class="section-header">C</h2>
+                <div class="country-grid">
+                    <a href="country_details.html?country=canada" class="country-card fade-in">
+                        <img src="images/canada.jpg" alt="Canada" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Canada</div>
+                            <div class="country-info">Capital: Ottawa • Population: 38.0M • Top-ranked universities and multicultural education</div>
+                        </div>
+                    </a>
+                    <a href="country_details.html?country=china" class="country-card fade-in">
+                        <img src="images/china.jpg" alt="China" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">China</div>
+                            <div class="country-info">Capital: Beijing • Population: 1.4B • Ancient universities and modern research centers</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Countries E -->
+            <div class="section" id="section-E">
+                <h2 class="section-header">E</h2>
+                <div class="country-grid">
+                    <a href="country_details.html?country=egypt" class="country-card fade-in">
+                        <img src="images/egypt.jpg" alt="Egypt" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Egypt</div>
+                            <div class="country-info">Capital: Cairo • Population: 104.3M • Ancient educational heritage and modern universities</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Countries F -->
+            <div class="section" id="section-F">
+                <h2 class="section-header">F</h2>
+                <div class="country-grid">
+                    <a href="country_details.html?country=france" class="country-card fade-in">
+                        <img src="images/france.jpg" alt="France" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">France</div>
+                            <div class="country-info">Capital: Paris • Population: 67.4M • Prestigious universities and research institutions</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Countries G -->
+            <div class="section" id="section-G">
+                <h2 class="section-header">G</h2>
+                <div class="country-grid">
+                    <a href="country_details.html?country=germany" class="country-card fade-in">
+                        <img src="images/germany.jpg" alt="Germany" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Germany</div>
+                            <div class="country-info">Capital: Berlin • Population: 83.2M • Excellence in engineering and research</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Countries I -->
+            <div class="section" id="section-I">
+                <h2 class="section-header">I</h2>
+                <div class="country-grid">
+                    <a href="country_details.html?country=india" class="country-card fade-in">
+                        <img src="images/india.jpg" alt="India" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">India</div>
+                            <div class="country-info">Capital: New Delhi • Population: 1.4B • Diverse educational institutions and cultural heritage</div>
+                        </div>
+                    </a>
+                    <a href="country_details.html?country=italy" class="country-card fade-in">
+                        <img src="images/italy.jpg" alt="Italy" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Italy</div>
+                            <div class="country-info">Capital: Rome • Population: 60.4M • Historic universities and art education</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Countries J -->
+            <div class="section" id="section-J">
+                <h2 class="section-header">J</h2>
+                <div class="country-grid">
+                    <a href="country_details.html?country=japan" class="country-card fade-in">
+                        <img src="images/japan.jpg" alt="Japan" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Japan</div>
+                            <div class="country-info">Capital: Tokyo • Population: 125.7M • Technology-focused education and research</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Countries M -->
+            <div class="section" id="section-M">
+                <h2 class="section-header">M</h2>
+                <div class="country-grid">
+                    <a href="country_details.html?country=mexico" class="country-card fade-in">
+                        <img src="images/mexico.jpg" alt="Mexico" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Mexico</div>
+                            <div class="country-info">Capital: Mexico City • Population: 128.9M • Rich cultural education and universities</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Countries N -->
+            <div class="section" id="section-N">
+                <h2 class="section-header">N</h2>
+                <div class="country-grid">
+                    <a href="country_details.html?country=netherlands" class="country-card fade-in">
+                        <img src="images/netherlands.jpg" alt="Netherlands" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Netherlands</div>
+                            <div class="country-info">Capital: Amsterdam • Population: 17.1M • Innovative education and international programs</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Countries Q -->
+            <div class="section" id="section-Q">
+                <h2 class="section-header">Q</h2>
+                <div class="country-grid">
+                    <a href="country_details.html?country=qatar" class="country-card fade-in">
+                        <img src="images/qatar.jpg" alt="Qatar" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Qatar</div>
+                            <div class="country-info">Capital: Doha • Population: 2.9M • Modern universities and research centers</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Countries R -->
+            <div class="section" id="section-R">
+                <h2 class="section-header">R</h2>
+                <div class="country-grid">
+                    <a href="country_details.html?country=russia" class="country-card fade-in">
+                        <img src="images/russia.jpg" alt="Russia" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Russia</div>
+                            <div class="country-info">Capital: Moscow • Population: 144.1M • Strong scientific and technical education</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Countries S -->
+            <div class="section" id="section-S">
+                <h2 class="section-header">S</h2>
+                <div class="country-grid">
+                    <a href="country_details.html?country=singapore" class="country-card fade-in">
+                        <img src="images/singapore.jpg" alt="Singapore" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Singapore</div>
+                            <div class="country-info">Capital: Singapore • Population: 5.7M • World-class universities and innovation hubs</div>
+                        </div>
+                    </a>
+                    <a href="country_details.html?country=spain" class="country-card fade-in">
+                        <img src="images/spain.jpg" alt="Spain" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Spain</div>
+                            <div class="country-info">Capital: Madrid • Population: 47.4M • Historic universities and modern research</div>
+                        </div>
+                    </a>
+                    <a href="country_details.html?country=sweden" class="country-card fade-in">
+                        <img src="images/sweden.jpg" alt="Sweden" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Sweden</div>
+                            <div class="country-info">Capital: Stockholm • Population: 10.4M • Innovation-focused education and research</div>
+                        </div>
+                    </a>
+                    <a href="country_details.html?country=switzerland" class="country-card fade-in">
+                        <img src="images/switzerland.jpg" alt="Switzerland" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">Switzerland</div>
+                            <div class="country-info">Capital: Bern • Population: 8.7M • Excellence in research and international education</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Countries U -->
+            <div class="section" id="section-U">
+                <h2 class="section-header">U</h2>
+                <div class="country-grid">
+                    <a href="country_details.html?country=uk" class="country-card fade-in">
+                        <img src="images/uk.jpg" alt="United Kingdom" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">United Kingdom</div>
+                            <div class="country-info">Capital: London • Population: 67.2M • World-renowned universities and research</div>
+                        </div>
+                    </a>
+                    <a href="country_details.html?country=usa" class="country-card fade-in">
+                        <img src="images/usa.jpg" alt="United States" class="country-image">
+                        <div class="country-content">
+                            <div class="country-name">United States</div>
+                            <div class="country-info">Capital: Washington D.C. • Population: 331.9M • Leading universities and diverse programs</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-links">
+                <a href="privacy_policy.html" class="footer-link">Privacy Policy</a>
+                <a href="terms_of_service.html" class="footer-link">Terms of Service</a>
+                <a href="contact.html" class="footer-link">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
