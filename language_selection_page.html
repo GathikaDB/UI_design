@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSearch - Language Selection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.08);
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, #1E40AF 0%, #0F766E 100%);
+            padding: 60px 24px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.9);
+            font-weight: 400;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 40px;
+            left: 24px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+
+        /* Search Section */
+        .search-section {
+            margin: -20px 24px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        .search-input {
+            width: 100%;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 16px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: #1e293b;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #64748b;
+        }
+
+        /* Content */
+        .content {
+            padding: 24px 24px 40px;
+            position: relative;
+        }
+
+        /* Language List */
+        .language-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .language-item {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .language-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            border-color: rgba(30, 64, 175, 0.1);
+        }
+
+        .language-item.selected {
+            border-color: #0F766E;
+            background: linear-gradient(135deg, rgba(15, 118, 110, 0.05) 0%, rgba(15, 118, 110, 0.02) 100%);
+            box-shadow: 0 8px 30px rgba(15, 118, 110, 0.15);
+        }
+
+        .language-item:active {
+            transform: scale(0.98);
+        }
+
+        .flag-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: #f1f5f9;
+            color: #64748b;
+            flex-shrink: 0;
+        }
+
+        .language-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .language-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1E40AF;
+            line-height: 1.3;
+        }
+
+        .language-native {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .selected .language-name {
+            color: #0F766E;
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            background: #0F766E;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .selected .check-icon {
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+            }
+            
+            .header {
+                padding: 50px 20px 30px;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .search-section {
+                margin: -15px 20px 0;
+            }
+            
+            .search-card {
+                padding: 20px;
+            }
+            
+            .content {
+                padding: 20px 20px 40px;
+            }
+            
+            .language-item {
+                padding: 16px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Loading animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <div class="header">
+            <button class="back-button" onclick="history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="header-content">
+                <h1>Select Language</h1>
+                <p>Please select your preferred language for a personalized experience.</p>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-card">
+                <input type="text" class="search-input" placeholder="Search for a language...">
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="language-list">
+                <!-- English (Selected) -->
+                <a href="#" class="language-item selected" onclick="selectLanguage('en')">
+                    <div class="flag-icon">🇺🇸</div>
+                    <div class="language-info">
+                        <div class="language-name">English</div>
+                        <div class="language-native">English</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Spanish -->
+                <a href="#" class="language-item" onclick="selectLanguage('es')">
+                    <div class="flag-icon">🇪🇸</div>
+                    <div class="language-info">
+                        <div class="language-name">Spanish</div>
+                        <div class="language-native">Español</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- French -->
+                <a href="#" class="language-item" onclick="selectLanguage('fr')">
+                    <div class="flag-icon">🇫🇷</div>
+                    <div class="language-info">
+                        <div class="language-name">French</div>
+                        <div class="language-native">Français</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- German -->
+                <a href="#" class="language-item" onclick="selectLanguage('de')">
+                    <div class="flag-icon">🇩🇪</div>
+                    <div class="language-info">
+                        <div class="language-name">German</div>
+                        <div class="language-native">Deutsch</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Italian -->
+                <a href="#" class="language-item" onclick="selectLanguage('it')">
+                    <div class="flag-icon">🇮🇹</div>
+                    <div class="language-info">
+                        <div class="language-name">Italian</div>
+                        <div class="language-native">Italiano</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Portuguese -->
+                <a href="#" class="language-item" onclick="selectLanguage('pt')">
+                    <div class="flag-icon">🇵🇹</div>
+                    <div class="language-info">
+                        <div class="language-name">Portuguese</div>
+                        <div class="language-native">Português</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Russian -->
+                <a href="#" class="language-item" onclick="selectLanguage('ru')">
+                    <div class="flag-icon">🇷🇺</div>
+                    <div class="language-info">
+                        <div class="language-name">Russian</div>
+                        <div class="language-native">Русский</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Chinese -->
+                <a href="#" class="language-item" onclick="selectLanguage('zh')">
+                    <div class="flag-icon">🇨🇳</div>
+                    <div class="language-info">
+                        <div class="language-name">Chinese</div>
+                        <div class="language-native">中文</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Japanese -->
+                <a href="#" class="language-item" onclick="selectLanguage('ja')">
+                    <div class="flag-icon">🇯🇵</div>
+                    <div class="language-info">
+                        <div class="language-name">Japanese</div>
+                        <div class="language-native">日本語</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Korean -->
+                <a href="#" class="language-item" onclick="selectLanguage('ko')">
+                    <div class="flag-icon">🇰🇷</div>
+                    <div class="language-info">
+                        <div class="language-name">Korean</div>
+                        <div class="language-native">한국어</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Arabic -->
+                <a href="#" class="language-item" onclick="selectLanguage('ar')">
+                    <div class="flag-icon">🇸🇦</div>
+                    <div class="language-info">
+                        <div class="language-name">Arabic</div>
+                        <div class="language-native">العربية</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Hindi -->
+                <a href="#" class="language-item" onclick="selectLanguage('hi')">
+                    <div class="flag-icon">🇮🇳</div>
+                    <div class="language-info">
+                        <div class="language-name">Hindi</div>
+                        <div class="language-native">हिन्दी</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Turkish -->
+                <a href="#" class="language-item" onclick="selectLanguage('tr')">
+                    <div class="flag-icon">🇹🇷</div>
+                    <div class="language-info">
+                        <div class="language-name">Turkish</div>
+                        <div class="language-native">Türkçe</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Dutch -->
+                <a href="#" class="language-item" onclick="selectLanguage('nl')">
+                    <div class="flag-icon">🇳🇱</div>
+                    <div class="language-info">
+                        <div class="language-name">Dutch</div>
+                        <div class="language-native">Nederlands</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Swedish -->
+                <a href="#" class="language-item" onclick="selectLanguage('sv')">
+                    <div class="flag-icon">🇸🇪</div>
+                    <div class="language-info">
+                        <div class="language-name">Swedish</div>
+                        <div class="language-native">Svenska</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Norwegian -->
+                <a href="#" class="language-item" onclick="selectLanguage('no')">
+                    <div class="flag-icon">🇳🇴</div>
+                    <div class="language-info">
+                        <div class="language-name">Norwegian</div>
+                        <div class="language-native">Norsk</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Danish -->
+                <a href="#" class="language-item" onclick="selectLanguage('da')">
+                    <div class="flag-icon">🇩🇰</div>
+                    <div class="language-info">
+                        <div class="language-name">Danish</div>
+                        <div class="language-native">Dansk</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Finnish -->
+                <a href="#" class="language-item" onclick="selectLanguage('fi')">
+                    <div class="flag-icon">🇫🇮</div>
+                    <div class="language-info">
+                        <div class="language-name">Finnish</div>
+                        <div class="language-native">Suomi</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Polish -->
+                <a href="#" class="language-item" onclick="selectLanguage('pl')">
+                    <div class="flag-icon">🇵🇱</div>
+                    <div class="language-info">
+                        <div class="language-name">Polish</div>
+                        <div class="language-native">Polski</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Czech -->
+                <a href="#" class="language-item" onclick="selectLanguage('cs')">
+                    <div class="flag-icon">🇨🇿</div>
+                    <div class="language-info">
+                        <div class="language-name">Czech</div>
+                        <div class="language-native">Čeština</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Hungarian -->
+                <a href="#" class="language-item" onclick="selectLanguage('hu')">
+                    <div class="flag-icon">🇭🇺</div>
+                    <div class="language-info">
+                        <div class="language-name">Hungarian</div>
+                        <div class="language-native">Magyar</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Romanian -->
+                <a href="#" class="language-item" onclick="selectLanguage('ro')">
+                    <div class="flag-icon">🇷🇴</div>
+                    <div class="language-info">
+                        <div class="language-name">Romanian</div>
+                        <div class="language-native">Română</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Bulgarian -->
+                <a href="#" class="language-item" onclick="selectLanguage('bg')">
+                    <div class="flag-icon">🇧🇬</div>
+                    <div class="language-info">
+                        <div class="language-name">Bulgarian</div>
+                        <div class="language-native">Български</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Croatian -->
+                <a href="#" class="language-item" onclick="selectLanguage('hr')">
+                    <div class="flag-icon">🇭🇷</div>
+                    <div class="language-info">
+                        <div class="language-name">Croatian</div>
+                        <div class="language-native">Hrvatski</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Slovak -->
+                <a href="#" class="language-item" onclick="selectLanguage('sk')">
+                    <div class="flag-icon">🇸🇰</div>
+                    <div class="language-info">
+                        <div class="language-name">Slovak</div>
+                        <div class="language-native">Slovenčina</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Slovenian -->
+                <a href="#" class="language-item" onclick="selectLanguage('sl')">
+                    <div class="flag-icon">🇸🇮</div>
+                    <div class="language-info">
+                        <div class="language-name">Slovenian</div>
+                        <div class="language-native">Slovenščina</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Estonian -->
+                <a href="#" class="language-item" onclick="selectLanguage('et')">
+                    <div class="flag-icon">🇪🇪</div>
+                    <div class="language-info">
+                        <div class="language-name">Estonian</div>
+                        <div class="language-native">Eesti</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Latvian -->
+                <a href="#" class="language-item" onclick="selectLanguage('lv')">
+                    <div class="flag-icon">🇱🇻</div>
+                    <div class="language-info">
+                        <div class="language-name">Latvian</div>
+                        <div class="language-native">Latviešu</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Lithuanian -->
+                <a href="#" class="language-item" onclick="selectLanguage('lt')">
+                    <div class="flag-icon">🇱🇹</div>
+                    <div class="language-info">
+                        <div class="language-name">Lithuanian</div>
+                        <div class="language-native">Lietuvių</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Maltese -->
+                <a href="#" class="language-item" onclick="selectLanguage('mt')">
+                    <div class="flag-icon">🇲🇹</div>
+                    <div class="language-info">
+                        <div class="language-name">Maltese</div>
+                        <div class="language-native">Malti</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Greek -->
+                <a href="#" class="language-item" onclick="selectLanguage('el')">
+                    <div class="flag-icon">🇬🇷</div>
+                    <div class="language-info">
+                        <div class="language-name">Greek</div>
+                        <div class="language-native">Ελληνικά</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Hebrew -->
+                <a href="#" class="language-item" onclick="selectLanguage('he')">
+                    <div class="flag-icon">🇮🇱</div>
+                    <div class="language-info">
+                        <div class="language-name">Hebrew</div>
+                        <div class="language-native">עברית</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Thai -->
+                <a href="#" class="language-item" onclick="selectLanguage('th')">
+                    <div class="flag-icon">🇹🇭</div>
+                    <div class="language-info">
+                        <div class="language-name">Thai</div>
+                        <div class="language-native">ไทย</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Vietnamese -->
+                <a href="#" class="language-item" onclick="selectLanguage('vi')">
+                    <div class="flag-icon">🇻🇳</div>
+                    <div class="language-info">
+                        <div class="language-name">Vietnamese</div>
+                        <div class="language-native">Tiếng Việt</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Indonesian -->
+                <a href="#" class="language-item" onclick="selectLanguage('id')">
+                    <div class="flag-icon">🇮🇩</div>
+                    <div class="language-info">
+                        <div class="language-name">Indonesian</div>
+                        <div class="language-native">Bahasa Indonesia</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Malay -->
+                <a href="#" class="language-item" onclick="selectLanguage('ms')">
+                    <div class="flag-icon">🇲🇾</div>
+                    <div class="language-info">
+                        <div class="language-name">Malay</div>
+                        <div class="language-native">Bahasa Melayu</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Filipino -->
+                <a href="#" class="language-item" onclick="selectLanguage('fil')">
+                    <div class="flag-icon">🇵🇭</div>
+                    <div class="language-info">
+                        <div class="language-name">Filipino</div>
+                        <div class="language-native">Filipino</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Bengali -->
+                <a href="#" class="language-item" onclick="selectLanguage('bn')">
+                    <div class="flag-icon">🇧🇩</div>
+                    <div class="language-info">
+                        <div class="language-name">Bengali</div>
+                        <div class="language-native">বাংলা</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Urdu -->
+                <a href="#" class="language-item" onclick="selectLanguage('ur')">
+                    <div class="flag-icon">🇵🇰</div>
+                    <div class="language-info">
+                        <div class="language-name">Urdu</div>
+                        <div class="language-native">اردو</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Persian -->
+                <a href="#" class="language-item" onclick="selectLanguage('fa')">
+                    <div class="flag-icon">🇮🇷</div>
+                    <div class="language-info">
+                        <div class="language-name">Persian</div>
+                        <div class="language-native">فارسی</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Ukrainian -->
+                <a href="#" class="language-item" onclick="selectLanguage('uk')">
+                    <div class="flag-icon">🇺🇦</div>
+                    <div class="language-info">
+                        <div class="language-name">Ukrainian</div>
+                        <div class="language-native">Українська</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Belarusian -->
+                <a href="#" class="language-item" onclick="selectLanguage('be')">
+                    <div class="flag-icon">🇧🇾</div>
+                    <div class="language-info">
+                        <div class="language-name">Belarusian</div>
+                        <div class="language-native">Беларуская</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Georgian -->
+                <a href="#" class="language-item" onclick="selectLanguage('ka')">
+                    <div class="flag-icon">🇬🇪</div>
+                    <div class="language-info">
+                        <div class="language-name">Georgian</div>
+                        <div class="language-native">ქართული</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Armenian -->
+                <a href="#" class="language-item" onclick="selectLanguage('hy')">
+                    <div class="flag-icon">🇦🇲</div>
+                    <div class="language-info">
+                        <div class="language-name">Armenian</div>
+                        <div class="language-native">Հայերեն</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Azerbaijani -->
+                <a href="#" class="language-item" onclick="selectLanguage('az')">
+                    <div class="flag-icon">🇦🇿</div>
+                    <div class="language-info">
+                        <div class="language-name">Azerbaijani</div>
+                        <div class="language-native">Azərbaycan</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Kazakh -->
+                <a href="#" class="language-item" onclick="selectLanguage('kk')">
+                    <div class="flag-icon">🇰🇿</div>
+                    <div class="language-info">
+                        <div class="language-name">Kazakh</div>
+                        <div class="language-native">Қазақ</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Kyrgyz -->
+                <a href="#" class="language-item" onclick="selectLanguage('ky')">
+                    <div class="flag-icon">🇰🇬</div>
+                    <div class="language-info">
+                        <div class="language-name">Kyrgyz</div>
+                        <div class="language-native">Кыргызча</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Uzbek -->
+                <a href="#" class="language-item" onclick="selectLanguage('uz')">
+                    <div class="flag-icon">🇺🇿</div>
+                    <div class="language-info">
+                        <div class="language-name">Uzbek</div>
+                        <div class="language-native">O'zbek</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Tajik -->
+                <a href="#" class="language-item" onclick="selectLanguage('tg')">
+                    <div class="flag-icon">🇹🇯</div>
+                    <div class="language-info">
+                        <div class="language-name">Tajik</div>
+                        <div class="language-native">Тоҷикӣ</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+
+                <!-- Mongolian -->
+                <a href="#" class="language-item" onclick="selectLanguage('mn')">
+                    <div class="flag-icon">🇲🇳</div>
+                    <div class="language-info">
+                        <div class="language-name">Mongolian</div>
+                        <div class="language-native">Монгол</div>
+                    </div>
+                    <div class="check-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectLanguage(code) {
+            // Save the selected language
+            localStorage.setItem('selectedLanguage', code);
+            
+            // Go back to previous page
+            history.back();
+        }
+    </script>
+</body>
+</html> 
